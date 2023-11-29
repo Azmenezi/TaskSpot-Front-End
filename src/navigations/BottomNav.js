@@ -11,11 +11,10 @@ import { BlurView } from "expo-blur";
 const Tab = createBottomTabNavigator();
 
 function BottomNavigation() {
-  const { user } = useContext(UserContext);
   return (
     <Tab.Navigator
       screenOptions={({ route }) => ({
-        tabBarActiveTintColor: "#ffffff",
+        // tabBarActiveTintColor: "#ffffff",
         tabBarInactiveTintColor: "gray",
         tabBarShowLabel: false,
         tabBarStyle: {
