@@ -1,7 +1,7 @@
 const { instance } = require("..");
 
 exports.login = async (userInfo) => {
-  const res = await instance.post("/auth/sign-in", userInfo);
+  const res = await instance.post("/auth/login", userInfo);
   return res.data;
 };
 exports.register = async (userInfo) => {
@@ -30,6 +30,5 @@ exports.register = async (userInfo) => {
 
 exports.checkUsername = async (username) => {
   const res = await instance.put(`/auth/username`, { username });
-
   return res.data;
 };
