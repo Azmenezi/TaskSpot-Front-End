@@ -23,7 +23,6 @@ const UsernameSchema = Yup.object().shape({
 const RegisterUsername = ({ navigation }) => {
   const [suggestions, setSuggestions] = useState([]);
   const [username, setUsername] = useState("");
-  const [email, setEmail] = useState("");
 
   const { mutate: userNamechecker, isLoading } = useMutation({
     mutationFn: checkUsername,
@@ -34,7 +33,6 @@ const RegisterUsername = ({ navigation }) => {
       if (data.message.includes("available")) {
         navigation.navigate("RegisterPassword", {
           username: username.toLowerCase(),
-          email: email.toLowerCase(),
         });
       }
     },
@@ -50,7 +48,6 @@ const RegisterUsername = ({ navigation }) => {
       onSubmit={(values) => {
         userNamechecker(values.username.toLowerCase());
         setUsername(values.username.toLowerCase());
-        setEmail(values.email.toLowerCase());
       }}
     >
       {({
@@ -87,25 +84,7 @@ const RegisterUsername = ({ navigation }) => {
               later.
             </Text>
           </View>
-          <TextInput
-            style={{
-              width: "88%",
-              height: 45,
-              marginBottom: 8,
-              paddingVertical: 8,
-              paddingHorizontal: 16,
-              borderWidth: 1,
-              borderColor: COLORS.lightGray,
-              borderRadius: 15,
-              backgroundColor: COLORS.white,
-              color: COLORS.black,
-            }}
-            placeholder="Email"
-            onBlur={handleBlur("email")}
-            onChangeText={handleChange("email")}
-            value={values.email}
-            placeholderTextColor={COLORS.black}
-          />
+
           <TextInput
             style={{
               width: "88%",
@@ -172,7 +151,7 @@ const RegisterUsername = ({ navigation }) => {
               borderRadius: 5,
             }}
           >
-            {(values.username && values.email) === "" ? (
+            {values.username === "" ? (
               <DisabledButton title="Next" disabled={true} />
             ) : (
               <AppButton2 title="Next" onPress={handleSubmit} />

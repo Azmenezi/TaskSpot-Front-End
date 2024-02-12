@@ -1,19 +1,22 @@
-import { FontAwesome } from "@expo/vector-icons";
-
-import { Formik } from "formik";
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import {
   Button,
-  Pressable,
   StyleSheet,
   Text,
   TextInput,
   View,
+  Pressable,
 } from "react-native";
+import { Formik } from "formik";
 import * as Yup from "yup";
+import { FontAwesome } from "@expo/vector-icons";
+import { useMutation } from "@tanstack/react-query";
+import jwt_decode from "jwt-decode";
+import { register } from "../../../apis/auth";
+import UserContext from "../../../contexts/UserContext";
+import { storeToken } from "../../../apis/storage";
 import { COLORS } from "../../../constants/themes";
 
-// Define validation schema
 const PasswordSchema = Yup.object().shape({
   password: Yup.string()
     .min(8, "Password must be at least 8 characters long.")
@@ -25,26 +28,44 @@ const PasswordSchema = Yup.object().shape({
 });
 
 const RegisterPassword = ({ route, navigation }) => {
-  const { username, email } = route.params;
+  const { username } = route.params;
   const [showPassword, setShowPassword] = useState(false);
-
-  // Get the currently active theme
+  const { setUser } = useContext(UserContext);
 
   const toggleShowPassword = () => {
     setShowPassword((prev) => !prev);
   };
 
+  const {
+    mutate: registerFunction,
+    // Add error and isLoading handling as needed
+  } = useMutation({
+    mutationFn: (newUserInfo) => {
+      return register(newUserInfo);
+    },
+    onSuccess: (data) => {
+      const decodedUser = jwt_decode(data.token);
+      setUser(decodedUser);
+      storeToken(data.token);
+      // Navigate to the next screen or home screen after successful registration
+      // navigation.navigate('Home');
+    },
+    onError: (err) => {
+      console.log("Error in registration:", err);
+      // Handle registration error (e.g., display an error message)
+    },
+  });
+
+  const handleSubmit = (values) => {
+    const newUserInfo = { username, password: values.password };
+    registerFunction(newUserInfo);
+  };
+
   return (
     <Formik
       initialValues={{ password: "" }}
-      //   validationSchema={PasswordSchema}
-      onSubmit={(values) => {
-        navigation.navigate("RegisterImage", {
-          email,
-          username,
-          password: values.password,
-        });
-      }}
+      validationSchema={PasswordSchema}
+      onSubmit={handleSubmit}
     >
       {({
         handleChange,
@@ -56,41 +77,14 @@ const RegisterPassword = ({ route, navigation }) => {
       }) => (
         <View style={styles.container}>
           <View style={styles.textContainer}>
-            <Text
-              style={{
-                color: COLORS.black,
-                textAlign: "center",
-                fontSize: 20,
-                fontWeight: "bold",
-                marginBottom: 16,
-              }}
-            >
-              Pick a password
-            </Text>
-            <Text
-              style={{
-                color: COLORS.black,
-                textAlign: "center",
-                marginBottom: 8,
-              }}
-            >
+            <Text style={styles.headerText}>Pick a password</Text>
+            <Text style={styles.normalText}>
               We cannot remember the password, so you need to enter it on every
               device you have even if it is on iCloud :)
             </Text>
           </View>
           <TextInput
-            style={{
-              backgroundColor: COLORS.white,
-              color: COLORS.black,
-              width: "80%",
-              height: 48,
-              marginBottom: 8,
-              paddingVertical: 8,
-              paddingHorizontal: 16,
-              borderWidth: 1,
-              borderColor: COLORS.gray,
-              borderRadius: 15,
-            }}
+            style={styles.textInput}
             placeholder="Password"
             secureTextEntry={!showPassword}
             onBlur={handleBlur("password")}
@@ -109,10 +103,10 @@ const RegisterPassword = ({ route, navigation }) => {
           </Pressable>
 
           {errors.password && touched.password && (
-            <Text style={{ color: COLORS.danger }}>{errors.password}</Text>
+            <Text style={styles.errorText}>{errors.password}</Text>
           )}
-          <View style={{ marginTop: 8 }}>
-            <Button title="Next" onPress={handleSubmit} />
+          <View style={styles.buttonContainer}>
+            <Button title="Register" onPress={handleSubmit} />
           </View>
         </View>
       )}
@@ -130,15 +124,45 @@ const styles = StyleSheet.create({
     marginBottom: 16,
     width: "80%",
   },
+  headerText: {
+    color: COLORS.black,
+    textAlign: "center",
+    fontSize: 20,
+    fontWeight: "bold",
+    marginBottom: 16,
+  },
+  normalText: {
+    color: COLORS.black,
+    textAlign: "center",
+    marginBottom: 8,
+  },
+  textInput: {
+    backgroundColor: COLORS.white,
+    color: COLORS.black,
+    width: "80%",
+    height: 48,
+    marginBottom: 8,
+    paddingVertical: 8,
+    paddingHorizontal: 16,
+    borderWidth: 1,
+    borderColor: COLORS.gray,
+    borderRadius: 15,
+  },
   pressable: {
     position: "absolute",
     padding: 8,
-    top: 240, // You may need to adjust this value depending on the device
-    right: 48, // You may need to adjust this value depending on the device
+    top: 240, // Adjust this value depending on the device
+    right: 48, // Adjust this value depending on the device
   },
   eyeIcon: {
     marginTop: -22,
     opacity: 0.6,
+  },
+  errorText: {
+    color: COLORS.danger,
+  },
+  buttonContainer: {
+    marginTop: 8,
   },
 });
 
