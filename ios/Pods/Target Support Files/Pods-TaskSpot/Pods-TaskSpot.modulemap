@@ -1,0 +1,6 @@
+module Pods_TaskSpot {
+  umbrella header "Pods-TaskSpot-umbrella.h"
+
+  export *
+  module * { export * }
+}
