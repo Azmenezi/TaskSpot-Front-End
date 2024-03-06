@@ -5,6 +5,7 @@ const ROUTES = {
     },
     MIDDLE_STACK: {
       STACK: "MIDDLE_STACK",
+      CREATE_TASK: "Create task",
     },
     RIGHT_STACK: {
       STACK: "RIGHT_STACK",

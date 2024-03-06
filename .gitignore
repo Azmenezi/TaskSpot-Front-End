@@ -36,3 +36,4 @@ yarn-error.*
 
 # Cocoapods
 Pods/
+ios/Pods/

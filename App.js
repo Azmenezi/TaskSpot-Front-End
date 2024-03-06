@@ -16,12 +16,13 @@ StatusBar.setBarStyle("light-content", true);
 
 export default function App() {
   const [user, setUser] = useState(null);
-
+  console.log(user);
   const checkToken = async () => {
     const token = await getToken();
     if (token) {
       const decodeUser = jwt_decode(token);
       const currentTime = Date.now() / 1000;
+      console.log(decodeUser.exp < currentTime);
       if (decodeUser.exp < currentTime) {
         removeToken();
         return setUser(null);

@@ -6,6 +6,7 @@ import RightScreen from "../screens/RightScreen";
 import { Ionicons } from "@expo/vector-icons";
 import Home from "../screens/Home";
 import { View } from "react-native";
+import CreateTaskNav from "./CreateTaskNav.js";
 
 const Tab = createBottomTabNavigator();
 
@@ -21,7 +22,7 @@ function BottomNavigation() {
           height: 60,
           borderTopColor: "#ffffff",
           borderTopWidth: 0.2,
-          bottom: 15,
+          bottom: 25,
           left: 20,
           right: 20,
           borderRadius: 20,
@@ -34,13 +35,15 @@ function BottomNavigation() {
         options={{
           headerShown: false,
           tabBarIcon: ({ size, color, focused }) => (
-            <Ionicons name="md-home" size={30} color={color} />
+            <View style={{ top: 10 }}>
+              <Ionicons name="md-home" size={30} color={color} />
+            </View>
           ),
         }}
       />
       <Tab.Screen
         name={ROUTES.HEDERROUTES.MIDDLE_STACK.STACK}
-        component={MiddleScreen}
+        component={CreateTaskNav}
         options={{
           headerShown: false,
           tabBarIcon: ({ size, color, focused }) => (
@@ -65,7 +68,7 @@ function BottomNavigation() {
         options={{
           headerShown: false,
           tabBarIcon: ({ size, color, focused }) => (
-            <View style={{}}>
+            <View style={{ top: 10 }}>
               <Ionicons name="person" size={30} color={color} />
             </View>
           ),

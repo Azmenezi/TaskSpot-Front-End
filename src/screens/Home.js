@@ -1,15 +1,9 @@
+import { Ionicons } from "@expo/vector-icons";
+import { useQuery } from "@tanstack/react-query";
 import React from "react";
-import {
-  Pressable,
-  ScrollView,
-  Text,
-  TouchableOpacity,
-  View,
-} from "react-native";
+import { ScrollView, Text, TouchableOpacity, View } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { getCategories } from "../apis/category";
-import { useQuery } from "@tanstack/react-query";
-import { Ionicons } from "@expo/vector-icons";
 
 const Home = () => {
   const insets = useSafeAreaInsets();
@@ -18,7 +12,7 @@ const Home = () => {
     queryKey: ["categories"],
     queryFn: () => getCategories(),
   });
-  console.log(categories);
+
   return (
     <ScrollView
       contentContainerStyle={{
@@ -27,15 +21,19 @@ const Home = () => {
         flex: 1,
       }}
     >
-      <View
-        style={{
-          flexWrap: "wrap",
+      <View style={{ padding: 16 }}>
+        <Text style={{ fontSize: 24 }}>Categories</Text>
+      </View>
+      <ScrollView
+        horizontal={true}
+        contentContainerStyle={{
+          paddingHorizontal: 16,
           flexDirection: "row",
-          justifyContent: "center",
+          gap: 8,
         }}
       >
         {categories?.map((category) => (
-          <View style={{ padding: 16, width: "50%" }}>
+          <View style={{ width: 200 }}>
             <TouchableOpacity
               style={{
                 justifyContent: "center",
@@ -51,7 +49,7 @@ const Home = () => {
             </TouchableOpacity>
           </View>
         ))}
-      </View>
+      </ScrollView>
     </ScrollView>
   );
 };
