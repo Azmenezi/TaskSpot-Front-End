@@ -1,7 +1,7 @@
 const ROUTES = {
   HEDERROUTES: {
-    LEFT_STACK: {
-      STACK: "LEFT_STACK",
+    HOME: {
+      STACK: "Home",
     },
     MIDDLE_STACK: {
       STACK: "MIDDLE_STACK",

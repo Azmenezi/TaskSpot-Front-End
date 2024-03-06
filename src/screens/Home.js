@@ -11,7 +11,7 @@ import { getCategories } from "../apis/category";
 import { useQuery } from "@tanstack/react-query";
 import { Ionicons } from "@expo/vector-icons";
 
-const LeftScreen = () => {
+const Home = () => {
   const insets = useSafeAreaInsets();
 
   const { data: categories } = useQuery({
@@ -56,4 +56,4 @@ const LeftScreen = () => {
   );
 };
 
-export default LeftScreen;
+export default Home;

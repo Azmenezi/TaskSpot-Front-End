@@ -1,12 +1,11 @@
-import React, { useContext } from "react";
+import React from "react";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import ROUTES from ".";
-import UserContext from "../contexts/UserContext";
-import LeftScreen from "../screens/LeftScreen";
 import MiddleScreen from "../screens/MiddleScreen";
 import RightScreen from "../screens/RightScreen";
 import { Ionicons } from "@expo/vector-icons";
-import { BlurView } from "expo-blur";
+import Home from "../screens/Home";
+import { View } from "react-native";
 
 const Tab = createBottomTabNavigator();
 
@@ -30,8 +29,8 @@ function BottomNavigation() {
       })}
     >
       <Tab.Screen
-        name={ROUTES.HEDERROUTES.LEFT_STACK.STACK}
-        component={LeftScreen}
+        name={ROUTES.HEDERROUTES.HOME.STACK}
+        component={Home}
         options={{
           headerShown: false,
           tabBarIcon: ({ size, color, focused }) => (
@@ -45,7 +44,18 @@ function BottomNavigation() {
         options={{
           headerShown: false,
           tabBarIcon: ({ size, color, focused }) => (
-            <Ionicons name="notifications" size={30} color={color} />
+            <View
+              style={{
+                backgroundColor: "white",
+                borderRadius: 200,
+                height: 75,
+                width: 75,
+                justifyContent: "center",
+                alignItems: "center",
+              }}
+            >
+              <Ionicons name="add-circle" size={50} color={color} />
+            </View>
           ),
         }}
       />
@@ -55,7 +65,9 @@ function BottomNavigation() {
         options={{
           headerShown: false,
           tabBarIcon: ({ size, color, focused }) => (
-            <Ionicons name="person" size={30} color={color} />
+            <View style={{}}>
+              <Ionicons name="person" size={30} color={color} />
+            </View>
           ),
         }}
       />
