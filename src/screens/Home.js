@@ -147,6 +147,8 @@ const Home = () => {
         "place"
       );
       // excutedFunction(places[distances.indexOf(minDistance)]);
+    } else if (minDistance <= 100) {
+      fetchPlaces(userLocation); // Fetch new places as user has more than 100 meters away from all places
     } else if (lastFetchLocation) {
       // Check if there's been a significant change in location since last fetch
       const distanceFromLastFetch = calculateDistance(
