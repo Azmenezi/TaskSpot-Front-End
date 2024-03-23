@@ -8,9 +8,8 @@ import {
   Button,
   StyleSheet,
 } from "react-native";
-import { Ionicons } from "@expo/vector-icons";
+import { Ionicons, Entypo } from "@expo/vector-icons";
 import { useQuery } from "@tanstack/react-query";
-import { useSafeAreaInsets } from "react-native-safe-area-context";
 import * as Location from "expo-location";
 import * as TaskManager from "expo-task-manager";
 import { getCategories } from "../apis/category";
@@ -24,14 +23,13 @@ const Home = () => {
   const [nearbyPlaces, setNearbyPlaces] = useState([]);
   const [modalVisible, setModalVisible] = useState(false);
   const [lastFetchLocation, setLastFetchLocation] = useState(null);
-  console.log(lastFetchLocation, "lastFetchLocation");
+  const [closestPlace, setClosestPlace] = useState(null); // The closest place to the user
   const placesRef = useRef(null); // Using useRef to store the places data
 
   const {
     data,
     isLoading: isLoadingPlaces,
     isFetching,
-    refetch,
   } = useQuery({
     queryKey: ["nearby places"],
     queryFn: () =>
@@ -41,15 +39,6 @@ const Home = () => {
       ),
     enabled: !!lastFetchLocation, // Only run query if userLocation is not null
   });
-  console.log(isFetching, "isFetching");
-  console.log(nearbyPlaces);
-  let places = data?.nearbyPlaces?.map((place) => {
-    return {
-      name: place.name,
-      latitude: place.location.coordinates[1],
-      longitude: place.location.coordinates[0],
-    };
-  });
 
   useEffect(() => {
     setNearbyPlaces(
@@ -58,12 +47,20 @@ const Home = () => {
           name: place.name,
           latitude: place.location.coordinates[1],
           longitude: place.location.coordinates[0],
-          category: place.category.name,
+          category: place.category,
         };
       })
     );
   }, [data?.nearbyPlaces]);
+
   // Store fetched places in the ref when they're available and not loading
+  let places = data?.nearbyPlaces?.map((place) => {
+    return {
+      name: place.name,
+      latitude: place.location.coordinates[1],
+      longitude: place.location.coordinates[0],
+    };
+  });
   useEffect(() => {
     if (!isLoadingPlaces && places) {
       placesRef.current = places;
@@ -102,25 +99,6 @@ const Home = () => {
     queryFn: () => getRecentTasks(),
   });
 
-  // const checkProximityAndExecute = (userLocation) => {
-  //   const places = placesRef.current; // Access places from the ref
-  //   if (!places) return; // Ensure places data is available before proceeding
-
-  //   places.forEach((place) => {
-  //     const distance = calculateDistance(
-  //       userLocation.coords.latitude,
-  //       userLocation.coords.longitude,
-  //       place.latitude,
-  //       place.longitude
-  //     );
-  //     const PROXIMITY_THRESHOLD = 5000; // meters
-  //     console.log(distance, "distance");
-  //     if (distance <= PROXIMITY_THRESHOLD) {
-  //       excutedFunction(place);
-  //     }
-  //   });
-  // };
-
   const PROXIMITY_THRESHOLD = 500; // meters, for triggering a new places fetch
   const SIGNIFICANT_CHANGE = 500; // meters, minimum change in location to consider for updates
 
@@ -152,6 +130,10 @@ const Home = () => {
         places[distances.indexOf(minDistance)],
         "place"
       );
+      if (closestPlace !== places[distances.indexOf(minDistance)]) {
+        setClosestPlace(places[distances.indexOf(minDistance)]);
+      }
+
       // excutedFunction(places[distances.indexOf(minDistance)]);
     } else if (minDistance <= 100) {
       fetchPlaces(userLocation); // Fetch new places as user has more than 100 meters away from all places
@@ -178,7 +160,7 @@ const Home = () => {
     });
     // Here you would call getNearbyPlaces or similar function to update placesRef and possibly state
     // For this example, just log and update lastFetchLocation
-    refetch();
+
     // Note: Remember to handle state updates and re-rendering as needed
   };
 
@@ -218,22 +200,21 @@ const Home = () => {
             {nearbyPlaces &&
               nearbyPlaces?.map((place) => (
                 <Marker
+                  key={place.name}
                   coordinate={{
                     latitude: place.latitude,
                     longitude: place.longitude,
                   }}
                   title={place.name}
-                  description={place.category}
-                />
+                  description={place.category.name}
+                >
+                  <Ionicons
+                    name={place.category.icon}
+                    size={22}
+                    color={closestPlace?.name === place.name ? "red" : "black"}
+                  />
+                </Marker>
               ))}
-            {/* <Marker
-                coordinate={{
-                  latitude: lastFetchLocation?.latitude,
-                  longitude: lastFetchLocation?.longitude,
-                }}
-
-                description={"description"}
-              /> */}
           </MapView>
         )}
       </View>
