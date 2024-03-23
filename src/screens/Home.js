@@ -6,6 +6,7 @@ import {
   View,
   Modal,
   Button,
+  StyleSheet,
 } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import { useQuery } from "@tanstack/react-query";
@@ -15,11 +16,12 @@ import * as TaskManager from "expo-task-manager";
 import { getCategories } from "../apis/category";
 import { getRecentTasks } from "../apis/tasks";
 import { getNearbyPlaces } from "../apis/place";
+import MapView, { Marker, PROVIDER_GOOGLE } from "react-native-maps";
 
 const LOCATION_TASK_NAME = "background-location-task";
 
 const Home = () => {
-  const insets = useSafeAreaInsets();
+  const [nearbyPlaces, setNearbyPlaces] = useState([]);
   const [modalVisible, setModalVisible] = useState(false);
   const [lastFetchLocation, setLastFetchLocation] = useState(null);
   console.log(lastFetchLocation, "lastFetchLocation");
@@ -40,15 +42,7 @@ const Home = () => {
     enabled: !!lastFetchLocation, // Only run query if userLocation is not null
   });
   console.log(isFetching, "isFetching");
-  console.log(
-    data?.nearbyPlaces?.map((place) => {
-      return {
-        name: place.name,
-        latitude: place.location.coordinates[1],
-        longitude: place.location.coordinates[0],
-      };
-    })
-  );
+  console.log(nearbyPlaces);
   let places = data?.nearbyPlaces?.map((place) => {
     return {
       name: place.name,
@@ -57,6 +51,18 @@ const Home = () => {
     };
   });
 
+  useEffect(() => {
+    setNearbyPlaces(
+      data?.nearbyPlaces?.map((place) => {
+        return {
+          name: place.name,
+          latitude: place.location.coordinates[1],
+          longitude: place.location.coordinates[0],
+          category: place.category.name,
+        };
+      })
+    );
+  }, [data?.nearbyPlaces]);
   // Store fetched places in the ref when they're available and not loading
   useEffect(() => {
     if (!isLoadingPlaces && places) {
@@ -115,7 +121,7 @@ const Home = () => {
   //   });
   // };
 
-  const PROXIMITY_THRESHOLD = 50; // meters, for triggering a new places fetch
+  const PROXIMITY_THRESHOLD = 500; // meters, for triggering a new places fetch
   const SIGNIFICANT_CHANGE = 500; // meters, minimum change in location to consider for updates
 
   const checkProximityAndExecute = (userLocation) => {
@@ -141,7 +147,7 @@ const Home = () => {
       // Execute function when user is within proximity
       console.log(
         "User is within proximity of a place ",
-        minDistance,
+        minDistance.toFixed(0),
         "meters away.",
         places[distances.indexOf(minDistance)],
         "place"
@@ -193,12 +199,51 @@ const Home = () => {
   );
 
   return (
-    <View style={{ flex: 1 }}>
+    <View style={{ flex: 0.9 }}>
+      <View style={styles.container}>
+        {lastFetchLocation && (
+          <MapView
+            followsUserLocation={true}
+            showsUserLocation={true}
+            provider={PROVIDER_GOOGLE}
+            customMapStyle={mapStyle}
+            style={styles.map}
+            initialRegion={{
+              latitude: lastFetchLocation.latitude,
+              longitude: lastFetchLocation.longitude,
+              latitudeDelta: 0.0322,
+              longitudeDelta: 0.0081,
+            }}
+          >
+            {nearbyPlaces &&
+              nearbyPlaces?.map((place) => (
+                <Marker
+                  coordinate={{
+                    latitude: place.latitude,
+                    longitude: place.longitude,
+                  }}
+                  title={place.name}
+                  description={place.category}
+                />
+              ))}
+            {/* <Marker
+                coordinate={{
+                  latitude: lastFetchLocation?.latitude,
+                  longitude: lastFetchLocation?.longitude,
+                }}
+
+                description={"description"}
+              /> */}
+          </MapView>
+        )}
+      </View>
       <ScrollView
-        contentContainerStyle={{
-          paddingTop: insets.top,
-          paddingBottom: insets.bottom,
-        }}
+        contentContainerStyle={
+          {
+            // paddingTop: insets.top,
+            // paddingBottom: insets.bottom,
+          }
+        }
       >
         <View style={{ padding: 16 }}>
           <Text style={{ fontSize: 24 }}>Categories</Text>
@@ -268,6 +313,7 @@ const Home = () => {
           ))}
         </ScrollView>
       </ScrollView>
+
       <Modal
         animationType="slide"
         transparent={true}
@@ -337,5 +383,265 @@ function calculateDistance(lat1, lon1, lat2, lon2) {
   const distance = R * c; // in meters
   return distance;
 }
+
+mapStyle = [
+  {
+    elementType: "geometry",
+    stylers: [
+      {
+        color: "#ebe3cd",
+      },
+    ],
+  },
+  {
+    elementType: "labels.text.fill",
+    stylers: [
+      {
+        color: "#523735",
+      },
+    ],
+  },
+  {
+    elementType: "labels.text.stroke",
+    stylers: [
+      {
+        color: "#f5f1e6",
+      },
+    ],
+  },
+  {
+    featureType: "administrative",
+    elementType: "geometry.stroke",
+    stylers: [
+      {
+        color: "#c9b2a6",
+      },
+    ],
+  },
+  {
+    featureType: "administrative.land_parcel",
+    elementType: "geometry.stroke",
+    stylers: [
+      {
+        color: "#dcd2be",
+      },
+    ],
+  },
+  {
+    featureType: "administrative.land_parcel",
+    elementType: "labels",
+    stylers: [
+      {
+        visibility: "off",
+      },
+    ],
+  },
+  {
+    featureType: "administrative.land_parcel",
+    elementType: "labels.text.fill",
+    stylers: [
+      {
+        color: "#ae9e90",
+      },
+    ],
+  },
+  {
+    featureType: "landscape.natural",
+    elementType: "geometry",
+    stylers: [
+      {
+        color: "#dfd2ae",
+      },
+    ],
+  },
+  {
+    featureType: "poi",
+    elementType: "geometry",
+    stylers: [
+      {
+        color: "#dfd2ae",
+      },
+    ],
+  },
+  {
+    featureType: "poi",
+    elementType: "labels.text.fill",
+    stylers: [
+      {
+        color: "#93817c",
+      },
+    ],
+  },
+  {
+    featureType: "poi.business",
+    stylers: [
+      {
+        visibility: "off",
+      },
+    ],
+  },
+  {
+    featureType: "poi.park",
+    elementType: "geometry.fill",
+    stylers: [
+      {
+        color: "#a5b076",
+      },
+    ],
+  },
+  {
+    featureType: "poi.park",
+    elementType: "labels.text",
+    stylers: [
+      {
+        visibility: "off",
+      },
+    ],
+  },
+  {
+    featureType: "poi.park",
+    elementType: "labels.text.fill",
+    stylers: [
+      {
+        color: "#447530",
+      },
+    ],
+  },
+  {
+    featureType: "road",
+    elementType: "geometry",
+    stylers: [
+      {
+        color: "#f5f1e6",
+      },
+    ],
+  },
+  {
+    featureType: "road.arterial",
+    elementType: "geometry",
+    stylers: [
+      {
+        color: "#fdfcf8",
+      },
+    ],
+  },
+  {
+    featureType: "road.highway",
+    elementType: "geometry",
+    stylers: [
+      {
+        color: "#f8c967",
+      },
+    ],
+  },
+  {
+    featureType: "road.highway",
+    elementType: "geometry.stroke",
+    stylers: [
+      {
+        color: "#e9bc62",
+      },
+    ],
+  },
+  {
+    featureType: "road.highway.controlled_access",
+    elementType: "geometry",
+    stylers: [
+      {
+        color: "#e98d58",
+      },
+    ],
+  },
+  {
+    featureType: "road.highway.controlled_access",
+    elementType: "geometry.stroke",
+    stylers: [
+      {
+        color: "#db8555",
+      },
+    ],
+  },
+  {
+    featureType: "road.local",
+    elementType: "labels",
+    stylers: [
+      {
+        visibility: "off",
+      },
+    ],
+  },
+  {
+    featureType: "road.local",
+    elementType: "labels.text.fill",
+    stylers: [
+      {
+        color: "#806b63",
+      },
+    ],
+  },
+  {
+    featureType: "transit.line",
+    elementType: "geometry",
+    stylers: [
+      {
+        color: "#dfd2ae",
+      },
+    ],
+  },
+  {
+    featureType: "transit.line",
+    elementType: "labels.text.fill",
+    stylers: [
+      {
+        color: "#8f7d77",
+      },
+    ],
+  },
+  {
+    featureType: "transit.line",
+    elementType: "labels.text.stroke",
+    stylers: [
+      {
+        color: "#ebe3cd",
+      },
+    ],
+  },
+  {
+    featureType: "transit.station",
+    elementType: "geometry",
+    stylers: [
+      {
+        color: "#dfd2ae",
+      },
+    ],
+  },
+  {
+    featureType: "water",
+    elementType: "geometry.fill",
+    stylers: [
+      {
+        color: "#b9d3c2",
+      },
+    ],
+  },
+  {
+    featureType: "water",
+    elementType: "labels.text.fill",
+    stylers: [
+      {
+        color: "#92998d",
+      },
+    ],
+  },
+];
+const styles = StyleSheet.create({
+  container: {
+    height: 400,
+  },
+  map: {
+    width: "100%",
+    height: "100%",
+  },
+});
 
 export default Home;
