@@ -8,7 +8,7 @@ import {
   Button,
   StyleSheet,
 } from "react-native";
-import { Ionicons, Entypo } from "@expo/vector-icons";
+import { Ionicons } from "@expo/vector-icons";
 import { useQuery } from "@tanstack/react-query";
 import * as Location from "expo-location";
 import * as TaskManager from "expo-task-manager";
@@ -16,6 +16,7 @@ import { getCategories } from "../apis/category";
 import { getRecentTasks } from "../apis/tasks";
 import { getNearbyPlaces } from "../apis/place";
 import MapView, { Marker, PROVIDER_GOOGLE } from "react-native-maps";
+import TimerNotification from "../components/TimerNotification";
 
 const LOCATION_TASK_NAME = "background-location-task";
 
@@ -29,6 +30,7 @@ const Home = () => {
   const {
     data,
     isLoading: isLoadingPlaces,
+    refetch,
     isFetching,
   } = useQuery({
     queryKey: ["nearby places"],
@@ -104,6 +106,11 @@ const Home = () => {
 
   const checkProximityAndExecute = (userLocation) => {
     const places = placesRef.current;
+    if (!lastFetchLocation)
+      return setLastFetchLocation({
+        latitude: userLocation.coords.latitude,
+        longitude: userLocation.coords.longitude,
+      });
     if (!places || places.length === 0) {
       fetchPlaces(userLocation); // Initial fetch or refetch when there are no places
       return;
@@ -160,7 +167,7 @@ const Home = () => {
     });
     // Here you would call getNearbyPlaces or similar function to update placesRef and possibly state
     // For this example, just log and update lastFetchLocation
-
+    refetch();
     // Note: Remember to handle state updates and re-rendering as needed
   };
 
@@ -175,6 +182,8 @@ const Home = () => {
 
       const location = locations[0];
       if (location) {
+        if (isFetching) return; // Don't run checks if we're already fetching places
+
         checkProximityAndExecute(location);
       }
     }
@@ -293,6 +302,7 @@ const Home = () => {
             </View>
           ))}
         </ScrollView>
+        {closestPlace && <TimerNotification place={closestPlace} />}
       </ScrollView>
 
       <Modal
