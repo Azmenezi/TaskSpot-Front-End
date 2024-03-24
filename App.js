@@ -9,6 +9,7 @@ import AuthNavigation from "./src/navigations/AuthNavigation";
 import { SafeAreaProvider } from "react-native-safe-area-context";
 import { getToken, removeToken } from "./src/apis/storage";
 import jwt_decode from "jwt-decode";
+import FlashMessage from "react-native-flash-message";
 
 LogBox.ignoreLogs(["Warning: ..."]); // Ignore log notification by message
 LogBox.ignoreAllLogs(); //Ignore all log notifications
@@ -41,6 +42,13 @@ export default function App() {
             {/* <SafeAreaView> */}
             {user ? <BottomNavigation /> : <AuthNavigation />}
             {/* </SafeAreaView> */}
+            <FlashMessage
+              duration={6000}
+              position="top"
+              hideStatusBar={true}
+              hideOnPress={true}
+            />
+            {/* <--- here as the last component */}
           </NavigationContainer>
         </SafeAreaProvider>
       </UserContext.Provider>

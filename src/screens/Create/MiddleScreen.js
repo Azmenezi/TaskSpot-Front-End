@@ -1,10 +1,10 @@
 import { View, Text, ScrollView, TouchableOpacity } from "react-native";
 import React from "react";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
-import { getCategories } from "../apis/category";
+import { getCategories } from "../../apis/category";
 import { useQuery } from "@tanstack/react-query";
 import { Ionicons } from "@expo/vector-icons";
-import ROUTES from "../navigations";
+import ROUTES from "../../navigations";
 
 const MiddleScreen = ({ navigation }) => {
   const insets = useSafeAreaInsets();
@@ -13,7 +13,7 @@ const MiddleScreen = ({ navigation }) => {
     queryKey: ["categories"],
     queryFn: () => getCategories(),
   });
-  console.log(categories);
+
   return (
     <ScrollView
       contentContainerStyle={{
@@ -39,14 +39,14 @@ const MiddleScreen = ({ navigation }) => {
         }}
       >
         {categories?.map((category) => (
-          <View style={{ padding: 8, width: "50%" }}>
+          <View key={category._id} style={{ padding: 8, width: "50%" }}>
             <TouchableOpacity
-              onPress={() =>
+              onPress={() => {
                 navigation.navigate(
                   ROUTES.HEDERROUTES.MIDDLE_STACK.CREATE_TASK,
                   { category }
-                )
-              }
+                );
+              }}
               style={{
                 justifyContent: "center",
                 alignItems: "center",

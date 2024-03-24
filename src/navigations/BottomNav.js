@@ -1,12 +1,13 @@
 import React from "react";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import ROUTES from ".";
-import MiddleScreen from "../screens/MiddleScreen";
+import MiddleScreen from "../screens/Create/MiddleScreen.js";
 import RightScreen from "../screens/RightScreen";
 import { Ionicons } from "@expo/vector-icons";
-import Home from "../screens/Home";
+import Home from "../screens/Home/Home.js";
 import { View } from "react-native";
 import CreateTaskNav from "./CreateTaskNav.js";
+import HomeNav from "./HomeNav.js";
 
 const Tab = createBottomTabNavigator();
 
@@ -31,7 +32,7 @@ function BottomNavigation() {
     >
       <Tab.Screen
         name={ROUTES.HEDERROUTES.HOME.STACK}
-        component={Home}
+        component={HomeNav}
         options={{
           headerShown: false,
           tabBarIcon: ({ size, color, focused }) => (

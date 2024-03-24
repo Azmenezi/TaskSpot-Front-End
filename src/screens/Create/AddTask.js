@@ -1,5 +1,5 @@
 import { Entypo, Fontisto } from "@expo/vector-icons";
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import React, { useState } from "react";
 import {
   ActivityIndicator,
@@ -15,6 +15,7 @@ import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { addTasks } from "../../apis/tasks";
 
 export default function AddTask({ route, navigation }) {
+  const queryClient = useQueryClient();
   const { category } = route.params;
   const insets = useSafeAreaInsets();
   const [tasks, setTasks] = useState([
@@ -27,6 +28,7 @@ export default function AddTask({ route, navigation }) {
     onSuccess: () => {
       navigation.pop();
       Alert.alert("Task added successfully");
+      return queryClient.invalidateQueries({ queryKey: ["my tasks"] });
     },
   });
 
@@ -100,7 +102,7 @@ export default function AddTask({ route, navigation }) {
           key={task.id}
           style={{ paddingHorizontal: 20, paddingVertical: 6 }}
         >
-          <View style={{ flexDirection: "row", gap: "5%" }}>
+          <View style={{ flexDirection: "row", gap: 5 }}>
             <View style={{ width: "65%" }}>
               <TextInput
                 style={{

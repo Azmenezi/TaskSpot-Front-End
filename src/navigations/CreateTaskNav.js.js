@@ -1,6 +1,6 @@
 import { createStackNavigator } from "@react-navigation/stack";
 import ROUTES from ".";
-import MiddleScreen from "../screens/MiddleScreen";
+import MiddleScreen from "../screens/Create/MiddleScreen";
 import AddTask from "../screens/Create/AddTask";
 
 const Stack = createStackNavigator();
@@ -9,7 +9,7 @@ const CreateTaskNav = () => {
   return (
     <Stack.Navigator>
       <Stack.Screen
-        name={ROUTES.HEDERROUTES.MIDDLE_STACK.STACK}
+        name={ROUTES.HEDERROUTES.MIDDLE_STACK.SELECT_CATEGORY}
         component={MiddleScreen}
         options={{ headerShown: false }}
       />
