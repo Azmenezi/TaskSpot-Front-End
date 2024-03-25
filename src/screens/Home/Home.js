@@ -19,8 +19,8 @@ const LOCATION_TASK_NAME = "background-location-task";
 
 const userCanChange = {
   nearbyPlacesRadius: 1000,
-  PROXIMITY_THRESHOLD: 50,
-  distanceInterval: 10,
+  PROXIMITY_THRESHOLD: 1000,
+  distanceInterval: 1,
 };
 
 const Home = ({ navigation }) => {
@@ -28,6 +28,7 @@ const Home = ({ navigation }) => {
   const [modalVisible, setModalVisible] = useState(false);
   const [lastFetchLocation, setLastFetchLocation] = useState(null);
   const [closestPlace, setClosestPlace] = useState(null); // The closest place to the user
+  const [usingForgroundLocation, setUsingForgroundLocation] = useState(false); // Using forground location updates
   const placesRef = useRef(null); // Using useRef to store the places data
 
   const { data: categories } = useQuery({
@@ -87,7 +88,8 @@ const Home = ({ navigation }) => {
     await Location.startLocationUpdatesAsync(LOCATION_TASK_NAME, {
       accuracy: Location.Accuracy.High,
       timeInterval: 10000,
-      distanceInterval: userCanChange.distanceInterval,
+      distanceInterval: 1,
+      showsBackgroundLocationIndicator: true,
     });
   };
 
@@ -171,6 +173,7 @@ const Home = ({ navigation }) => {
       const location = locations[0];
       if (location) {
         if (isFetching) return;
+        if (usingForgroundLocation) return;
         checkProximityAndExecute(location);
       }
     }
@@ -187,8 +190,8 @@ const Home = ({ navigation }) => {
             customMapStyle={mapStyle}
             style={styles.map}
             initialRegion={{
-              latitude: lastFetchLocation.latitude,
-              longitude: lastFetchLocation.longitude,
+              latitude: lastFetchLocation?.latitude,
+              longitude: lastFetchLocation?.longitude,
               latitudeDelta: 0.0322,
               longitudeDelta: 0.0081,
             }}
@@ -230,6 +233,10 @@ const Home = ({ navigation }) => {
       </ScrollView>
 
       <LocationPermissionModal
+        usingForgroundLocation={usingForgroundLocation}
+        setUsingForgroundLocation={setUsingForgroundLocation}
+        isFetching={isFetching}
+        checkProximityAndExecute={checkProximityAndExecute}
         startBackgroundLocationUpdates={startBackgroundLocationUpdates}
         modalVisible={modalVisible}
         setModalVisible={setModalVisible}

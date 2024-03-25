@@ -6,6 +6,10 @@ export default function LocationPermissionModal({
   modalVisible,
   setModalVisible,
   startBackgroundLocationUpdates,
+  checkProximityAndExecute,
+  isFetching,
+  usingForgroundLocation,
+  setUsingForgroundLocation,
 }) {
   const requestPermissions = async () => {
     const { status } = await Location.requestForegroundPermissionsAsync();
@@ -16,9 +20,53 @@ export default function LocationPermissionModal({
       await startBackgroundLocationUpdates();
     }
   };
+  const checkLocationServicesEnabled = async () => {
+    const isEnabled = await Location.hasServicesEnabledAsync();
+    if (!isEnabled) {
+      // Prompt user to enable location services
+      setModalVisible(true);
+    } else {
+      setModalVisible(false);
+    }
+  };
+
+  useEffect(() => {
+    checkLocationServicesEnabled();
+  }, []);
 
   useEffect(() => {
     requestPermissions();
+  }, []);
+
+  useEffect(() => {
+    let foregroundSubscription;
+
+    const watchPosition = async () => {
+      const { status } = await Location.requestForegroundPermissionsAsync();
+      if (status === "granted") {
+        foregroundSubscription = await Location.watchPositionAsync(
+          {
+            accuracy: Location.Accuracy.High,
+            distanceInterval: 1, // Trigger updates every meter.
+            timeInterval: 10000, // Trigger updates every second.
+          },
+          (location) => {
+            if (isFetching) return;
+            checkProximityAndExecute(location);
+            if (!usingForgroundLocation) {
+              setUsingForgroundLocation(true);
+            }
+          }
+        );
+      }
+    };
+
+    watchPosition();
+
+    return () => {
+      setUsingForgroundLocation(false);
+      foregroundSubscription && foregroundSubscription.remove();
+    };
   }, []);
 
   return (

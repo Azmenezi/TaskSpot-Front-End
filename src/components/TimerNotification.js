@@ -61,7 +61,7 @@ const TimerNotification = ({ place, tasks }) => {
         color: "blue",
       },
       trigger: {
-        seconds: 5,
+        seconds: 1,
       },
     };
 

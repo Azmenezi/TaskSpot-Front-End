@@ -1,6 +1,6 @@
 import { createStackNavigator } from "@react-navigation/stack";
 import Login from "../screens/Auth/Login";
-import RegisterImage from "../screens/Auth/Register/ImageHandler";
+
 import RegisterPassword from "../screens/Auth/Register/PasswordHandler";
 import RegisterUsername from "../screens/Auth/Register/UsernameHandler";
 
@@ -22,11 +22,6 @@ const AuthNavigation = () => {
       <Stack.Screen
         name="RegisterPassword"
         component={RegisterPassword}
-        options={{ headerShown: false }}
-      />
-      <Stack.Screen
-        name="RegisterImage"
-        component={RegisterImage}
         options={{ headerShown: false }}
       />
     </Stack.Navigator>
