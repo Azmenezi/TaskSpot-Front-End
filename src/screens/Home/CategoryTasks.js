@@ -17,6 +17,7 @@ import {
 } from "../../apis/tasks";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { FontAwesome, Feather, FontAwesome5 } from "@expo/vector-icons";
+import Header from "../../components/Header/Header";
 
 export default function CategoryTasks({ route }) {
   const { category } = route.params;
@@ -166,49 +167,62 @@ export default function CategoryTasks({ route }) {
       </View>
     );
   return (
-    <View style={styles.container}>
-      {tasks?.length === 0 ? (
-        <View
-          style={{ flex: 1, justifyContent: "center", alignItems: "center" }}
-        >
-          <Text style={{ textAlign: "center", fontSize: 18 }}>
-            no tasks to do in {category}
+    <>
+      <Header back={true}>
+        <View style={{ alignItems: "center" }}>
+          <Text style={{ fontSize: 24, color: "#52374a", fontWeight: "600" }}>
+            {category}
           </Text>
         </View>
-      ) : (
-        <FlatList
-          contentContainerStyle={{ paddingBottom: 200 }}
-          data={hideDeleted ? tasks.filter((task) => !task.done) : tasks}
-          renderItem={renderItem}
-          keyExtractor={(item) => item._id}
-        />
-      )}
-
-      <TouchableOpacity
-        style={[
-          {
-            backgroundColor: "white",
-            borderWidth: 3,
-            borderColor: "#52374a",
-            padding: 10,
-            borderRadius: 500,
-            position: "absolute",
-            bottom: 100,
-            left: 20,
-          },
-          styles.leftShadow,
-        ]}
-        onPress={
-          hideDeleted ? () => setHideDeleted(false) : bulkDeleteDoneTasks
-        }
-      >
-        {hideDeleted ? (
-          <FontAwesome5 name="undo-alt" size={24} color="#52374a" />
+      </Header>
+      <View style={styles.container}>
+        {tasks?.length === 0 ? (
+          <View
+            style={{
+              flex: 1,
+              justifyContent: "center",
+              alignItems: "center",
+            }}
+          >
+            <Text style={{ textAlign: "center", fontSize: 18 }}>
+              no tasks to do in {category}
+            </Text>
+          </View>
         ) : (
-          <Feather name="trash" size={24} color="#52374a" />
+          <FlatList
+            contentContainerStyle={{ paddingBottom: 200 }}
+            data={hideDeleted ? tasks.filter((task) => !task.done) : tasks}
+            renderItem={renderItem}
+            keyExtractor={(item) => item._id}
+          />
         )}
-      </TouchableOpacity>
-    </View>
+
+        <TouchableOpacity
+          style={[
+            {
+              backgroundColor: "white",
+              borderWidth: 3,
+              borderColor: "#52374a",
+              padding: 10,
+              borderRadius: 500,
+              position: "absolute",
+              bottom: 100,
+              left: 20,
+            },
+            styles.leftShadow,
+          ]}
+          onPress={
+            hideDeleted ? () => setHideDeleted(false) : bulkDeleteDoneTasks
+          }
+        >
+          {hideDeleted ? (
+            <FontAwesome5 name="undo-alt" size={24} color="#52374a" />
+          ) : (
+            <Feather name="trash" size={24} color="#52374a" />
+          )}
+        </TouchableOpacity>
+      </View>
+    </>
   );
 }
 

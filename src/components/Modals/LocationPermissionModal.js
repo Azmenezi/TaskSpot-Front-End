@@ -1,4 +1,4 @@
-import { Button, Modal, StyleSheet, Text, View } from "react-native";
+import { AppState, Button, Modal, StyleSheet, Text, View } from "react-native";
 import React, { useEffect } from "react";
 import * as Location from "expo-location";
 
@@ -18,6 +18,7 @@ export default function LocationPermissionModal({
       setModalVisible(true);
     } else {
       await startBackgroundLocationUpdates();
+      setModalVisible(false);
     }
   };
   const checkLocationServicesEnabled = async () => {
@@ -47,13 +48,22 @@ export default function LocationPermissionModal({
         foregroundSubscription = await Location.watchPositionAsync(
           {
             accuracy: Location.Accuracy.High,
-            distanceInterval: 1, // Trigger updates every meter.
+            distanceInterval: 10, // Trigger updates every meter.
             timeInterval: 10000, // Trigger updates every second.
           },
-          (location) => {
+          async (location) => {
             if (isFetching) return;
+            console.log("firstLocation, location");
             checkProximityAndExecute(location);
             if (!usingForgroundLocation) {
+              // Stop background updates if they are running
+              const isBackgroundLocationRunning =
+                await Location.hasStartedLocationUpdatesAsync(
+                  LOCATION_TASK_NAME
+                );
+              if (isBackgroundLocationRunning) {
+                await Location.stopLocationUpdatesAsync(LOCATION_TASK_NAME);
+              }
               setUsingForgroundLocation(true);
             }
           }
@@ -68,6 +78,26 @@ export default function LocationPermissionModal({
       foregroundSubscription && foregroundSubscription.remove();
     };
   }, []);
+
+  useEffect(() => {
+    const handleAppStateChange = (nextAppState) => {
+      if (nextAppState === "background") {
+        setUsingForgroundLocation(false);
+        startBackgroundLocationUpdates().catch(console.error);
+      }
+    };
+
+    // Add the event listener and keep the subscription object
+    const appStateSubscription = AppState.addEventListener(
+      "change",
+      handleAppStateChange
+    );
+
+    // Use the subscription object to remove the event listener
+    return () => {
+      appStateSubscription.remove();
+    };
+  }, [setUsingForgroundLocation, startBackgroundLocationUpdates]);
 
   return (
     <Modal

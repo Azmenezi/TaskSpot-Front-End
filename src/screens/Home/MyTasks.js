@@ -25,10 +25,10 @@ export default function MyTasks({ route, navigation }) {
   const [markedDone, setMarkedDone] = useState([]);
   const [markedUndone, setMarkedUndone] = useState([]);
 
-  // Initialize all categories as visible (or hidden if you prefer)
+  // Initialize all categories as visible
   const [hiddenCategories, setHiddenCategories] = useState(() =>
     categories.reduce((acc, category) => {
-      acc[category._id] = false; // Set to true if you want all categories to be initially hidden
+      acc[category._id] = false;
       return acc;
     }, {})
   );
@@ -119,6 +119,7 @@ export default function MyTasks({ route, navigation }) {
 
   const bulkDeleteDoneTasks = () => {
     setHideDeleted(true);
+    console.log(tasks.filter((task) => task.done).map((task) => task._id));
     setToBeDeleted(tasks.filter((task) => task.done).map((task) => task._id));
   };
 
@@ -228,34 +229,18 @@ export default function MyTasks({ route, navigation }) {
 
   return (
     <>
-      <Header>
-        <View
-          style={{
-            flexDirection: "row",
-            paddingHorizontal: 16,
-            paddingBottom: 6,
-          }}
-        >
-          <TouchableOpacity
-            onPress={() => navigation.goBack()}
-            style={{
-              borderRadius: 500,
-              borderWidth: 3,
-              padding: 6,
-            }}
-          >
-            <Entypo name="chevron-left" size={30} color="black" />
-          </TouchableOpacity>
-        </View>
-      </Header>
+      <Header back={true} />
       <View style={styles.container}>
         <FlatList
           contentContainerStyle={{ paddingBottom: 200 }}
           data={
             hideDeleted
-              ? groupedTasks.filter((category) =>
-                  category.tasks.some((task) => !task.done)
-                )
+              ? groupedTasks
+                  .filter((category) => category.tasks.length > 0)
+                  .map((category) => ({
+                    ...category,
+                    tasks: category.tasks.filter((task) => !task.done),
+                  }))
               : groupedTasks.filter((category) => category.tasks.length > 0)
           }
           renderItem={renderItem}

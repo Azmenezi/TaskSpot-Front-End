@@ -18,6 +18,7 @@ function BottomNavigation() {
       screenOptions={({ route }) => ({
         // tabBarActiveTintColor: "#ffffff",
         tabBarInactiveTintColor: "gray",
+        tabBarActiveTintColor: "black",
         tabBarShowLabel: false,
         tabBarStyle: {
           position: "absolute",
@@ -28,6 +29,14 @@ function BottomNavigation() {
           left: 20,
           right: 20,
           borderRadius: 20,
+          shadowColor: "#000",
+          shadowOffset: {
+            width: -6,
+            height: 8,
+          },
+          shadowOpacity: 0.2,
+          shadowRadius: 3.84,
+          elevation: 5,
         },
       })}
     >

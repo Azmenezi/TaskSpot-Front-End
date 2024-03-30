@@ -22,9 +22,7 @@ const ProfileNav = () => {
       <Stack.Screen
         name={ROUTES.HEDERROUTES.RIGHT_STACK.CATEGORY_TASKS}
         component={CategoryTasks}
-        options={({ route }) => ({
-          title: route.params.category + " tasks" || "Tasks", // Fallback to "Tasks" if categoryName is undefined
-        })}
+        options={{ headerShown: false }}
       />
     </Stack.Navigator>
   );

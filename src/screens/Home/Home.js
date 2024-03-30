@@ -3,13 +3,10 @@ import { useQuery } from "@tanstack/react-query";
 import * as Location from "expo-location";
 import * as TaskManager from "expo-task-manager";
 import React, { useEffect, useRef, useState } from "react";
-import { ActivityIndicator, ScrollView, StyleSheet, View } from "react-native";
+import { ActivityIndicator, StyleSheet, View } from "react-native";
 import MapView, { Marker, PROVIDER_GOOGLE } from "react-native-maps";
-import { getCategories } from "../../apis/category";
 import { getNearbyPlaces } from "../../apis/place";
 import { getMyTasks } from "../../apis/tasks";
-import HorizintalCategories from "../../components/Home/HorizontalScrollview";
-import RecentTasks from "../../components/Home/RecentTasks";
 import LocationPermissionModal from "../../components/Modals/LocationPermissionModal";
 import TimerNotification from "../../components/TimerNotification";
 import { calculateDistance } from "../../funcs/calculateDistance";
@@ -168,6 +165,7 @@ const Home = () => {
       const location = locations[0];
       if (location) {
         if (isFetching) return;
+        console.log(usingForgroundLocation, "usingForgroundLocation");
         if (usingForgroundLocation) return;
         checkProximityAndExecute(location);
       }
@@ -205,7 +203,9 @@ const Home = () => {
                   <Ionicons
                     name={place.category.icon}
                     size={22}
-                    color={closestPlace?.name === place.name ? "red" : "black"}
+                    color={
+                      closestPlace?.name === place.name ? "#52374a" : "white"
+                    }
                   />
                 </Marker>
               ))}

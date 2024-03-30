@@ -12,6 +12,7 @@ const TimerNotification = ({ place, tasks }) => {
   });
 
   useEffect(() => {
+    const now = new Date();
     const askNotification = async () => {
       const { status } = await Notifications.requestPermissionsAsync();
       if (status === "granted")
@@ -21,6 +22,15 @@ const TimerNotification = ({ place, tasks }) => {
     askNotification();
 
     const listener = Notifications.addNotificationReceivedListener(() => {
+      if (
+        (place === lastNotification.place &&
+          (place.category === lastNotification.category ||
+            now - lastNotification.time > 3600000)) ||
+        tasks.filter((task) => task.category === place.category._id).length ===
+          0
+      )
+        return;
+
       showMessage({
         message: "TaskSpot Notification",
         description: `You may find ${
@@ -29,6 +39,7 @@ const TimerNotification = ({ place, tasks }) => {
         type: "info",
         icon: "info",
       });
+      setLastNotification({ place, category: place.category, time: now });
     });
 
     return () => listener.remove();
