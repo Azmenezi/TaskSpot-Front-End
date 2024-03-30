@@ -5,6 +5,8 @@ import {
   Button,
   FlatList,
   TouchableOpacity,
+  ActivityIndicator,
+  Pressable,
 } from "react-native";
 import React, { useEffect, useRef, useState } from "react";
 import {
@@ -14,7 +16,7 @@ import {
   markUndoneTasks,
 } from "../../apis/tasks";
 import { useMutation, useQuery } from "@tanstack/react-query";
-import { FontAwesome } from "@expo/vector-icons";
+import { FontAwesome, Feather, FontAwesome5 } from "@expo/vector-icons";
 
 export default function CategoryTasks({ route }) {
   const { category } = route.params;
@@ -42,7 +44,7 @@ export default function CategoryTasks({ route }) {
     markedDoneRef.current = markedDone;
   }, [markedDone]);
 
-  const { data: initialTasks } = useQuery({
+  const { data: initialTasks, isLoading } = useQuery({
     queryKey: ["tasks", category],
     queryFn: () => getTasksByCategory(category),
   });
@@ -88,6 +90,7 @@ export default function CategoryTasks({ route }) {
   useEffect(() => {
     setTasks(initialTasks?.sort((a, b) => a.done - b.done));
   }, [initialTasks]);
+
   const toggleTaskDone = (id) => {
     const updatedTasks = tasks.map((task) => {
       if (task._id === id) {
@@ -114,83 +117,141 @@ export default function CategoryTasks({ route }) {
   };
 
   const renderItem = ({ item }) => (
-    <TouchableOpacity
-      onPress={() => {
-        toggleTaskDone(item._id);
+    <View
+      style={{
+        alignItems: "flex-end",
+        justifyContent: "center",
+        paddingVertical: 8,
       }}
-      style={[
-        styles.taskContainer,
-        { backgroundColor: item.done ? "#cccccc40" : "#ffffff10" },
-      ]}
     >
-      <Text>
-        {item.text} (Qty: {item.amount})
-      </Text>
-      <View style={styles.buttonsContainer}>
-        <View>
-          <FontAwesome
-            name={item.done ? "square" : "square-o"}
-            size={24}
-            color="black"
-          />
+      <Pressable
+        onPress={() => {
+          toggleTaskDone(item._id);
+        }}
+        style={[
+          styles.taskContainer,
+          {
+            backgroundColor: item.done ? "#8e7286" : "#52374a",
+            width: item.done ? "70%" : "80%",
+          },
+        ]}
+      >
+        <Text
+          style={{
+            fontSize: 16,
+            fontWeight: "500",
+            color: item.done ? "#baa3a7" : "white",
+          }}
+        >
+          {item.text} (Qty: {item.amount})
+        </Text>
+        <View style={styles.buttonsContainer}>
+          <View>
+            <FontAwesome
+              name={item.done ? "square" : "square-o"}
+              size={24}
+              color="white"
+            />
+          </View>
         </View>
-      </View>
-    </TouchableOpacity>
+      </Pressable>
+    </View>
   );
-
+  if (isLoading)
+    return (
+      <View
+        style={{ flex: 0.9, justifyContent: "center", alignItems: "center" }}
+      >
+        <ActivityIndicator />
+      </View>
+    );
   return (
     <View style={styles.container}>
-      <FlatList
-        data={hideDeleted ? tasks.filter((task) => !task.done) : tasks}
-        renderItem={renderItem}
-        keyExtractor={(item) => item._id}
-      />
-
-      {hideDeleted ? (
-        <TouchableOpacity
-          style={[styles.bulkDeleteButton, { backgroundColor: "green" }]}
-          onPress={() => setHideDeleted(false)}
+      {tasks?.length === 0 ? (
+        <View
+          style={{ flex: 1, justifyContent: "center", alignItems: "center" }}
         >
-          <Text style={styles.bulkDeleteButtonText}>Undo</Text>
-        </TouchableOpacity>
-      ) : (
-        <TouchableOpacity
-          style={styles.bulkDeleteButton}
-          onPress={bulkDeleteDoneTasks}
-        >
-          <Text style={styles.bulkDeleteButtonText}>
-            Bulk Delete Done Tasks
+          <Text style={{ textAlign: "center", fontSize: 18 }}>
+            no tasks to do in {category}
           </Text>
-        </TouchableOpacity>
+        </View>
+      ) : (
+        <FlatList
+          contentContainerStyle={{ paddingBottom: 200 }}
+          data={hideDeleted ? tasks.filter((task) => !task.done) : tasks}
+          renderItem={renderItem}
+          keyExtractor={(item) => item._id}
+        />
       )}
+
+      <TouchableOpacity
+        style={[
+          {
+            backgroundColor: "white",
+            borderWidth: 3,
+            borderColor: "#52374a",
+            padding: 10,
+            borderRadius: 500,
+            position: "absolute",
+            bottom: 100,
+            left: 20,
+          },
+          styles.leftShadow,
+        ]}
+        onPress={
+          hideDeleted ? () => setHideDeleted(false) : bulkDeleteDoneTasks
+        }
+      >
+        {hideDeleted ? (
+          <FontAwesome5 name="undo-alt" size={24} color="#52374a" />
+        ) : (
+          <Feather name="trash" size={24} color="#52374a" />
+        )}
+      </TouchableOpacity>
     </View>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
-    flex: 0.9,
+    flex: 1,
   },
   taskContainer: {
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",
-    padding: 10,
+    padding: 24,
     borderBottomWidth: 1,
     borderBottomColor: "#cccccc",
+
+    borderTopLeftRadius: 10,
+    borderBottomLeftRadius: 10,
+    shadowColor: "#000",
+    shadowOffset: {
+      width: -6,
+      height: 8,
+    },
+    shadowOpacity: 0.2,
+    shadowRadius: 3.84,
+    elevation: 5,
   },
   buttonsContainer: {
     flexDirection: "row",
     justifyContent: "space-between",
   },
-  bulkDeleteButton: {
-    backgroundColor: "red",
-    padding: 10,
-    margin: 10,
-    borderRadius: 5,
-  },
+
   bulkDeleteButtonText: {
     color: "white",
     textAlign: "center",
+  },
+  leftShadow: {
+    shadowColor: "#000",
+    shadowOffset: {
+      width: -6,
+      height: 8,
+    },
+    shadowOpacity: 0.2,
+    shadowRadius: 3.84,
+    elevation: 5,
   },
 });

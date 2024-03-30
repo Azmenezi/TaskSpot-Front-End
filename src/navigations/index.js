@@ -3,8 +3,6 @@ const ROUTES = {
     HOME: {
       STACK: "Home Stack",
       MAIN: "Home",
-      MY_TASKS: "MyTasks",
-      CATEGORY_TASKS: "CategoryTasks",
     },
     MIDDLE_STACK: {
       STACK: "Create Task Stack",
@@ -12,7 +10,10 @@ const ROUTES = {
       CREATE_TASK: "Create task",
     },
     RIGHT_STACK: {
-      STACK: "profile",
+      STACK: "profile stack",
+      MAIN: "Profile",
+      MY_TASKS: "MyTasks",
+      CATEGORY_TASKS: "CategoryTasks",
     },
   },
 };

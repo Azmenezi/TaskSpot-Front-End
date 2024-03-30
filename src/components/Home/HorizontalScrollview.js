@@ -26,9 +26,12 @@ export default function HorizintalCategories({ categories, navigation }) {
           <View style={{ width: 200 }} key={category._id}>
             <TouchableOpacity
               onPress={() =>
-                navigation.navigate(ROUTES.HEDERROUTES.HOME.CATEGORY_TASKS, {
-                  category: category.name,
-                })
+                navigation.navigate(
+                  ROUTES.HEDERROUTES.RIGHT_STACK.CATEGORY_TASKS,
+                  {
+                    category: category.name,
+                  }
+                )
               }
               style={{
                 justifyContent: "center",

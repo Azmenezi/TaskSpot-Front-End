@@ -3,7 +3,7 @@ import { useQuery } from "@tanstack/react-query";
 import * as Location from "expo-location";
 import * as TaskManager from "expo-task-manager";
 import React, { useEffect, useRef, useState } from "react";
-import { ScrollView, StyleSheet, View } from "react-native";
+import { ActivityIndicator, ScrollView, StyleSheet, View } from "react-native";
 import MapView, { Marker, PROVIDER_GOOGLE } from "react-native-maps";
 import { getCategories } from "../../apis/category";
 import { getNearbyPlaces } from "../../apis/place";
@@ -23,18 +23,13 @@ const userCanChange = {
   distanceInterval: 1,
 };
 
-const Home = ({ navigation }) => {
+const Home = () => {
   const [nearbyPlaces, setNearbyPlaces] = useState([]);
   const [modalVisible, setModalVisible] = useState(false);
   const [lastFetchLocation, setLastFetchLocation] = useState(null);
   const [closestPlace, setClosestPlace] = useState(null); // The closest place to the user
   const [usingForgroundLocation, setUsingForgroundLocation] = useState(false); // Using forground location updates
   const placesRef = useRef(null); // Using useRef to store the places data
-
-  const { data: categories } = useQuery({
-    queryKey: ["categories"],
-    queryFn: () => getCategories(),
-  });
 
   const { data: myTasks } = useQuery({
     queryKey: ["my tasks"],
@@ -180,9 +175,9 @@ const Home = ({ navigation }) => {
   );
 
   return (
-    <View style={{ flex: 0.9 }}>
+    <View style={{ flex: 1 }}>
       <View style={styles.container}>
-        {lastFetchLocation && (
+        {lastFetchLocation ? (
           <MapView
             followsUserLocation={true}
             showsUserLocation={true}
@@ -215,23 +210,17 @@ const Home = ({ navigation }) => {
                 </Marker>
               ))}
           </MapView>
+        ) : (
+          <ActivityIndicator size="large" color="black" />
         )}
       </View>
-      <ScrollView>
-        <HorizintalCategories categories={categories} navigation={navigation} />
-        <RecentTasks
-          categories={categories}
-          tasks={myTasks}
-          navigation={navigation}
-        />
-        {closestPlace && (
-          <TimerNotification
-            place={closestPlace}
-            tasks={myTasks.filter((task) => !task.done)}
-          />
-        )}
-      </ScrollView>
 
+      {closestPlace && (
+        <TimerNotification
+          place={closestPlace}
+          tasks={myTasks.filter((task) => !task.done)}
+        />
+      )}
       <LocationPermissionModal
         usingForgroundLocation={usingForgroundLocation}
         setUsingForgroundLocation={setUsingForgroundLocation}
@@ -247,7 +236,9 @@ const Home = ({ navigation }) => {
 
 const styles = StyleSheet.create({
   container: {
-    height: 400,
+    justifyContent: "center",
+    alignItems: "center",
+    height: "100%",
   },
   map: {
     width: "100%",

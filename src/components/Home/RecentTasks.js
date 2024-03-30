@@ -1,4 +1,5 @@
 import {
+  Pressable,
   ScrollView,
   StyleSheet,
   Text,
@@ -18,10 +19,10 @@ export default function RecentTasks({ tasks, navigation, categories }) {
           justifyContent: "space-between",
         }}
       >
-        <Text style={{ fontSize: 24 }}>Recent Tasks</Text>
+        <Text style={{ fontSize: 24 }}>Tasks to do</Text>
         <TouchableOpacity
           onPress={() =>
-            navigation.navigate(ROUTES.HEDERROUTES.HOME.MY_TASKS, {
+            navigation.navigate(ROUTES.HEDERROUTES.RIGHT_STACK.MY_TASKS, {
               tasks,
               categories,
             })
@@ -38,23 +39,26 @@ export default function RecentTasks({ tasks, navigation, categories }) {
           gap: 8,
         }}
       >
-        {tasks?.slice(0, 5)?.map((task) => (
-          <View style={{ width: 200 }} key={task._id}>
-            <TouchableOpacity
-              style={{
-                justifyContent: "center",
-                alignItems: "center",
-                backgroundColor: "gray",
-                borderRadius: 12,
-                padding: 20,
-                gap: 4,
-              }}
-            >
-              <Text style={{ fontSize: 20 }}>{task?.text}</Text>
-              <Text style={{ fontSize: 20 }}>amount: {task?.amount}</Text>
-            </TouchableOpacity>
-          </View>
-        ))}
+        {tasks
+          ?.filter((task) => !task.done)
+          ?.slice(0, 5)
+          ?.map((task) => (
+            <View style={{ width: 200 }} key={task._id}>
+              <Pressable
+                style={{
+                  justifyContent: "center",
+                  alignItems: "center",
+                  backgroundColor: "gray",
+                  borderRadius: 12,
+                  padding: 20,
+                  gap: 4,
+                }}
+              >
+                <Text style={{ fontSize: 20 }}>{task?.text}</Text>
+                <Text style={{ fontSize: 20 }}>amount: {task?.amount}</Text>
+              </Pressable>
+            </View>
+          ))}
       </ScrollView>
     </>
   );

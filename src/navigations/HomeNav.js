@@ -14,17 +14,6 @@ const HomeNav = () => {
         component={Home}
         options={{ headerShown: false }}
       />
-      <Stack.Screen
-        name={ROUTES.HEDERROUTES.HOME.MY_TASKS}
-        component={MyTasks}
-      />
-      <Stack.Screen
-        name={ROUTES.HEDERROUTES.HOME.CATEGORY_TASKS}
-        component={CategoryTasks}
-        options={({ route }) => ({
-          title: route.params.category + " tasks" || "Tasks", // Fallback to "Tasks" if categoryName is undefined
-        })}
-      />
     </Stack.Navigator>
   );
 };

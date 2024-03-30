@@ -3,11 +3,12 @@ import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import ROUTES from ".";
 import MiddleScreen from "../screens/Create/MiddleScreen.js";
 import RightScreen from "../screens/RightScreen";
-import { Ionicons } from "@expo/vector-icons";
+import { Ionicons, FontAwesome5 } from "@expo/vector-icons";
 import Home from "../screens/Home/Home.js";
 import { View } from "react-native";
 import CreateTaskNav from "./CreateTaskNav.js";
 import HomeNav from "./HomeNav.js";
+import ProfileNav from "./ProfileNav.js";
 
 const Tab = createBottomTabNavigator();
 
@@ -37,7 +38,7 @@ function BottomNavigation() {
           headerShown: false,
           tabBarIcon: ({ size, color, focused }) => (
             <View style={{ top: 10 }}>
-              <Ionicons name="md-home" size={30} color={color} />
+              <Ionicons name="location" size={30} color={color} />
             </View>
           ),
         }}
@@ -65,12 +66,13 @@ function BottomNavigation() {
       />
       <Tab.Screen
         name={ROUTES.HEDERROUTES.RIGHT_STACK.STACK}
-        component={RightScreen}
+        component={ProfileNav}
         options={{
           headerShown: false,
           tabBarIcon: ({ size, color, focused }) => (
             <View style={{ top: 10 }}>
-              <Ionicons name="person" size={30} color={color} />
+              <FontAwesome5 name="clipboard-list" size={30} color={color} />
+              {/* <Ionicons name="person" /> */}
             </View>
           ),
         }}

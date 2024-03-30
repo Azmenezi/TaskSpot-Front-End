@@ -1,5 +1,4 @@
 import { FontAwesome } from "@expo/vector-icons";
-
 import { useMutation } from "@tanstack/react-query";
 import { Formik } from "formik";
 import jwt_decode from "jwt-decode";
@@ -21,18 +20,11 @@ import DisabledButton from "../../components/Buttons/DisabledButton";
 import LoadingPage from "../../components/Skeleton/LoadingPage";
 import UserContext from "../../contexts/UserContext";
 import { COLORS } from "../../constants/themes";
-// import { useFonts } from 'expo-font';
+
 const LoginSchema = Yup.object().shape({
   username: Yup.string()
     .min(3, "Username must be at least 3 characters long.")
     .required("Username is required."),
-  password: Yup.string(),
-  // .min(8, "Password must be at least 8 characters long.")
-  // .matches(/\d/, "Password must contain a number.")
-  // .matches(/[A-Z]/, "Password must contain an uppercase letter.")
-  // .matches(/[a-z]/, "Password must contain a lowercase letter.")
-  // .matches(/[!@#$%^&*(),.?":{}|<>]/, "Password must contain a symbol.")
-  // .required("Password is required."),
 });
 const Login = ({ navigation }) => {
   const { setUser } = useContext(UserContext);
@@ -77,13 +69,6 @@ const Login = ({ navigation }) => {
   const handleRegister = () => {
     navigation.navigate("RegisterUsername");
   };
-  // const [fontsLoaded] = useFonts({
-  //   BowlbyOne: require("../../../assets/fonts/DMSans-Regular.ttf"),
-  // });
-
-  // if (!fontsLoaded) {
-  //   return null;
-  // }
 
   return (
     <SafeAreaView style={styles.container}>
@@ -110,10 +95,10 @@ const Login = ({ navigation }) => {
 
           return (
             <View style={styles.formContainer}>
-              <Text style={[styles.appName, { color: COLORS.black }]}>
+              <Text style={[styles.appName, { color: "COLORS.black" }]}>
                 TaskSpot
               </Text>
-              <Text style={[styles.subHeading, { color: COLORS.black }]}>
+              <Text style={[styles.subHeading, { color: "COLORS.black" }]}>
                 Enter your username and password to login.
               </Text>
 
@@ -123,7 +108,7 @@ const Login = ({ navigation }) => {
                 onBlur={handleBlur("username")}
                 onChangeText={handleChangeAndResetError("username")}
                 value={values.username}
-                placeholderTextColor={COLORS.black}
+                placeholderTextColor={"COLORS.black"}
               />
               {errors.username && touched.username && (
                 <Text style={styles.errorText}>{errors.username}</Text>
@@ -137,7 +122,7 @@ const Login = ({ navigation }) => {
                   onChangeText={handleChangeAndResetError("password")}
                   value={values.password}
                   secureTextEntry={!showPassword}
-                  placeholderTextColor={COLORS.black}
+                  placeholderTextColor={"COLORS.black"}
                 />
                 <TouchableOpacity
                   style={styles.showPasswordIcon}
@@ -148,7 +133,7 @@ const Login = ({ navigation }) => {
                   <FontAwesome
                     name={showPassword ? "eye" : "eye-slash"}
                     size={24}
-                    color={COLORS.black}
+                    color={"COLORS.black"}
                     style={styles.showPasswordIcon}
                   />
                 </TouchableOpacity>
@@ -160,8 +145,6 @@ const Login = ({ navigation }) => {
               {errors.password && touched.password && (
                 <Text style={styles.errorText}>{errors.password}</Text>
               )}
-
-              {/* <AppButton title="Login" onPress={handleSubmit} /> */}
               <View
                 style={{
                   marginTop: 0,
@@ -203,7 +186,6 @@ const styles = StyleSheet.create({
     fontSize: 44,
     marginBottom: 10,
     fontWeight: "bold",
-    // fontFamily: "BowlbyOne",
   },
   formContainer: {
     width: "88%",
@@ -229,7 +211,7 @@ const styles = StyleSheet.create({
     borderColor: COLORS.lightGray,
     borderRadius: 15,
     backgroundColor: COLORS.white,
-    color: COLORS.black,
+    color: "COLORS.black",
   },
   passwordContainer: {
     position: "relative",
