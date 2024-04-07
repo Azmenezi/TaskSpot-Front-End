@@ -1,10 +1,13 @@
 const COLORS = {
-  // light:
-  background: "#ffffff",
-  primary: "#2d265b", // keeping your original primary color
+  // dark theme colors:
+  background: "#121212",
+  behindItem: "#202020",
+  primary: "#ba9ffb",
   secondary: "#7d80a2",
+  whiteText: "#ffffff",
+  gray: "#3f3f3f",
+  darkGray: "#282828",
 
-  gray: "#444",
   white: "#F3F4F8",
   black: "#121212",
   lightGray: "#777",
@@ -17,7 +20,7 @@ const COLORS = {
   icon: "#2d265b",
   card: "transparent",
   inputBackground: "#dadde1",
-  whiteText: "#ffffff",
+
   popMenu: "#1c1c1c",
   notification: "#4ccdff", // using the primary blue for notifications
   GradientColors: ["#5f67ec", "#4ccdff"], // using the secondary blue and primary blue for gradients

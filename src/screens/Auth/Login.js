@@ -95,10 +95,10 @@ const Login = ({ navigation }) => {
 
           return (
             <View style={styles.formContainer}>
-              <Text style={[styles.appName, { color: "COLORS.black" }]}>
+              <Text style={[styles.appName, { color: COLORS.whiteText }]}>
                 TaskSpot
               </Text>
-              <Text style={[styles.subHeading, { color: "COLORS.black" }]}>
+              <Text style={[styles.subHeading, { color: COLORS.whiteText }]}>
                 Enter your username and password to login.
               </Text>
 
@@ -108,7 +108,7 @@ const Login = ({ navigation }) => {
                 onBlur={handleBlur("username")}
                 onChangeText={handleChangeAndResetError("username")}
                 value={values.username}
-                placeholderTextColor={"COLORS.black"}
+                placeholderTextColor={"gray"}
               />
               {errors.username && touched.username && (
                 <Text style={styles.errorText}>{errors.username}</Text>
@@ -122,7 +122,7 @@ const Login = ({ navigation }) => {
                   onChangeText={handleChangeAndResetError("password")}
                   value={values.password}
                   secureTextEntry={!showPassword}
-                  placeholderTextColor={"COLORS.black"}
+                  placeholderTextColor={"gray"}
                 />
                 <TouchableOpacity
                   style={styles.showPasswordIcon}
@@ -133,7 +133,7 @@ const Login = ({ navigation }) => {
                   <FontAwesome
                     name={showPassword ? "eye" : "eye-slash"}
                     size={24}
-                    color={"COLORS.black"}
+                    color={COLORS.black}
                     style={styles.showPasswordIcon}
                   />
                 </TouchableOpacity>
@@ -180,7 +180,6 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: "center",
     justifyContent: "center",
-    backgroundColor: COLORS.background,
   },
   appName: {
     fontSize: 44,
@@ -211,7 +210,7 @@ const styles = StyleSheet.create({
     borderColor: COLORS.lightGray,
     borderRadius: 15,
     backgroundColor: COLORS.white,
-    color: "COLORS.black",
+    color: COLORS.black,
   },
   passwordContainer: {
     position: "relative",
@@ -236,6 +235,7 @@ const styles = StyleSheet.create({
     marginTop: 10,
   },
   registerText: {
+    color: COLORS.whiteText,
     marginRight: 5,
   },
   registerLink: {

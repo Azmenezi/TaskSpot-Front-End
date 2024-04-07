@@ -1,21 +1,16 @@
-import React, { useContext, useState } from "react";
-import {
-  Button,
-  StyleSheet,
-  Text,
-  TextInput,
-  View,
-  Pressable,
-} from "react-native";
-import { Formik } from "formik";
-import * as Yup from "yup";
 import { FontAwesome } from "@expo/vector-icons";
 import { useMutation } from "@tanstack/react-query";
+import { Formik } from "formik";
 import jwt_decode from "jwt-decode";
+import React, { useContext, useState } from "react";
+import { Pressable, StyleSheet, Text, TextInput, View } from "react-native";
+import * as Yup from "yup";
 import { register } from "../../../apis/auth";
-import UserContext from "../../../contexts/UserContext";
 import { storeToken } from "../../../apis/storage";
+import AppButton2 from "../../../components/Buttons/AppButton2";
+import DisabledButton from "../../../components/Buttons/DisabledButton";
 import { COLORS } from "../../../constants/themes";
+import UserContext from "../../../contexts/UserContext";
 
 const PasswordSchema = Yup.object().shape({
   password: Yup.string()
@@ -80,7 +75,7 @@ const RegisterPassword = ({ route, navigation }) => {
             <Text style={styles.headerText}>Pick a password</Text>
             <Text style={styles.normalText}>
               We cannot remember the password, so you need to enter it on every
-              device you have even if it is on iCloud :)
+              device you have even if it is saved on iCloud :)
             </Text>
           </View>
           <TextInput
@@ -90,7 +85,7 @@ const RegisterPassword = ({ route, navigation }) => {
             onBlur={handleBlur("password")}
             onChangeText={handleChange("password")}
             value={values.password}
-            placeholderTextColor={COLORS.primary}
+            placeholderTextColor={"gray"}
           />
 
           <Pressable style={styles.pressable} onPress={toggleShowPassword}>
@@ -105,8 +100,20 @@ const RegisterPassword = ({ route, navigation }) => {
           {errors.password && touched.password && (
             <Text style={styles.errorText}>{errors.password}</Text>
           )}
-          <View style={styles.buttonContainer}>
-            <Button title="Register" onPress={handleSubmit} />
+          <View
+            style={{
+              marginBottom: 8,
+              width: "88%",
+              height: 68,
+              alignItems: "center",
+              borderRadius: 5,
+            }}
+          >
+            {values.password === "" ? (
+              <DisabledButton title="Register" disabled={true} />
+            ) : (
+              <AppButton2 title="Register" onPress={handleSubmit} />
+            )}
           </View>
         </View>
       )}
@@ -125,14 +132,14 @@ const styles = StyleSheet.create({
     width: "80%",
   },
   headerText: {
-    color: COLORS.black,
+    color: COLORS.whiteText,
     textAlign: "center",
     fontSize: 20,
     fontWeight: "bold",
     marginBottom: 16,
   },
   normalText: {
-    color: COLORS.black,
+    color: COLORS.whiteText,
     textAlign: "center",
     marginBottom: 8,
   },

@@ -59,23 +59,29 @@ const RegisterUsername = ({ navigation }) => {
         errors,
         touched,
       }) => (
-        <View style={{ flex: 1, alignItems: "center", marginVertical: 161 }}>
+        <View
+          style={{
+            flex: 1,
+            alignItems: "center",
+            marginVertical: 161,
+          }}
+        >
           {isLoading && <LoadingPage />}
           <View style={{ marginTop: 96, marginBottom: 16, width: "80%" }}>
             <Text
               style={{
-                color: COLORS.black,
+                color: COLORS.whiteText,
                 textAlign: "center",
                 fontSize: 20,
                 fontWeight: "bold",
                 marginBottom: 16,
               }}
             >
-              Pick Username
+              Pick A Username
             </Text>
             <Text
               style={{
-                color: COLORS.black,
+                color: COLORS.whiteText,
                 textAlign: "center",
                 marginBottom: 8,
               }}
@@ -102,7 +108,7 @@ const RegisterUsername = ({ navigation }) => {
             onBlur={handleBlur("username")}
             onChangeText={handleChange("username")}
             value={values.username}
-            placeholderTextColor={COLORS.black}
+            placeholderTextColor={"gray"}
           />
           {errors.username && touched.username && (
             <Text style={{ color: COLORS.danger }}>{errors.username}</Text>

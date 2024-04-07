@@ -18,6 +18,7 @@ import {
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { FontAwesome, Feather, FontAwesome5 } from "@expo/vector-icons";
 import Header from "../../components/Header/Header";
+import { COLORS } from "../../constants/themes";
 
 export default function CategoryTasks({ route }) {
   const { category } = route.params;
@@ -132,8 +133,8 @@ export default function CategoryTasks({ route }) {
         style={[
           styles.taskContainer,
           {
-            backgroundColor: item.done ? "#8e7286" : "#52374a",
-            width: item.done ? "70%" : "80%",
+            backgroundColor: item.done ? COLORS.darkGray : COLORS.gray,
+            width: item.done ? "65%" : "80%",
           },
         ]}
       >
@@ -141,7 +142,7 @@ export default function CategoryTasks({ route }) {
           style={{
             fontSize: 16,
             fontWeight: "500",
-            color: item.done ? "#baa3a7" : "white",
+            color: item.done ? COLORS.whiteText + "60" : COLORS.whiteText,
           }}
         >
           {item.text} (Qty: {item.amount})
@@ -168,9 +169,39 @@ export default function CategoryTasks({ route }) {
     );
   return (
     <>
-      <Header back={true}>
+      <Header
+        back={true}
+        right={
+          <TouchableOpacity
+            disabled={
+              tasks?.filter((task) => task.done).length === 0 ? true : false
+            }
+            style={[
+              {
+                borderWidth: 3,
+                backgroundColor: COLORS.behindItem,
+                padding: 10,
+                borderRadius: 500,
+                alignItems: hideDeleted ? "flex-end" : "flex-start",
+              },
+              styles.leftShadow,
+            ]}
+            onPress={
+              hideDeleted ? () => setHideDeleted(false) : bulkDeleteDoneTasks
+            }
+          >
+            {hideDeleted ? (
+              <FontAwesome5 name="undo-alt" size={24} color={COLORS.primary} />
+            ) : (
+              <Feather name="trash" size={24} color={COLORS.primary} />
+            )}
+          </TouchableOpacity>
+        }
+      >
         <View style={{ alignItems: "center" }}>
-          <Text style={{ fontSize: 24, color: "#52374a", fontWeight: "600" }}>
+          <Text
+            style={{ fontSize: 24, color: COLORS.primary, fontWeight: "600" }}
+          >
             {category}
           </Text>
         </View>
@@ -196,31 +227,6 @@ export default function CategoryTasks({ route }) {
             keyExtractor={(item) => item._id}
           />
         )}
-
-        <TouchableOpacity
-          style={[
-            {
-              backgroundColor: "white",
-              borderWidth: 3,
-              borderColor: "#52374a",
-              padding: 10,
-              borderRadius: 500,
-              position: "absolute",
-              bottom: 100,
-              left: 20,
-            },
-            styles.leftShadow,
-          ]}
-          onPress={
-            hideDeleted ? () => setHideDeleted(false) : bulkDeleteDoneTasks
-          }
-        >
-          {hideDeleted ? (
-            <FontAwesome5 name="undo-alt" size={24} color="#52374a" />
-          ) : (
-            <Feather name="trash" size={24} color="#52374a" />
-          )}
-        </TouchableOpacity>
       </View>
     </>
   );
@@ -236,11 +242,11 @@ const styles = StyleSheet.create({
     alignItems: "center",
     padding: 24,
     borderBottomWidth: 1,
-    borderBottomColor: "#cccccc",
+    borderBottomColor: COLORS.behindItem,
 
     borderTopLeftRadius: 10,
     borderBottomLeftRadius: 10,
-    shadowColor: "#000",
+    shadowColor: COLORS.behindItem,
     shadowOffset: {
       width: -6,
       height: 8,

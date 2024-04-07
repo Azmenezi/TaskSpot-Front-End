@@ -3,6 +3,7 @@ import React from "react";
 import { StyleSheet, TouchableOpacity, View } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { useNavigation } from "@react-navigation/native";
+import { COLORS } from "../../constants/themes";
 export default function Header({ children, back = false, right = null }) {
   const insets = useSafeAreaInsets();
   const navigation = useNavigation();
@@ -19,7 +20,7 @@ export default function Header({ children, back = false, right = null }) {
           paddingBottom: 6,
         }}
       >
-        {back && (
+        {back ? (
           <TouchableOpacity
             onPress={() => navigation.goBack()}
             style={{
@@ -27,10 +28,13 @@ export default function Header({ children, back = false, right = null }) {
               borderRadius: 500,
               borderWidth: 3,
               padding: 6,
+              borderColor: COLORS.behindItem,
             }}
           >
-            <Entypo name="chevron-left" size={30} color="black" />
+            <Entypo name="chevron-left" size={30} color={COLORS.behindItem} />
           </TouchableOpacity>
+        ) : (
+          <View style={{ width: "20%" }} />
         )}
         <View
           style={{

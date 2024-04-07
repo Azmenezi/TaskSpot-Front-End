@@ -199,6 +199,7 @@ const Home = () => {
                   }}
                   title={place.name}
                   description={place.category.name}
+                  style={{ zIndex: closestPlace ? 1000 : 1 }}
                 >
                   <Ionicons
                     name={place.category.icon}

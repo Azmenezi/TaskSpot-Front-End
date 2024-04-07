@@ -3,12 +3,17 @@ import ROUTES from ".";
 import CategoryTasks from "../screens/Home/CategoryTasks";
 import MyTasks from "../screens/Home/MyTasks";
 import RightScreen from "../screens/RightScreen";
+import { COLORS } from "../constants/themes";
 
 const Stack = createStackNavigator();
 
 const ProfileNav = () => {
   return (
-    <Stack.Navigator>
+    <Stack.Navigator
+      screenOptions={{
+        cardStyle: { backgroundColor: COLORS.background },
+      }}
+    >
       <Stack.Screen
         name={ROUTES.HEDERROUTES.RIGHT_STACK.MAIN}
         component={RightScreen}

@@ -3,12 +3,17 @@ import Login from "../screens/Auth/Login";
 
 import RegisterPassword from "../screens/Auth/Register/PasswordHandler";
 import RegisterUsername from "../screens/Auth/Register/UsernameHandler";
+import { COLORS } from "../constants/themes";
 
 const Stack = createStackNavigator();
 
 const AuthNavigation = () => {
   return (
-    <Stack.Navigator>
+    <Stack.Navigator
+      screenOptions={{
+        cardStyle: { backgroundColor: COLORS.background },
+      }}
+    >
       <Stack.Screen
         name="Login"
         component={Login}
