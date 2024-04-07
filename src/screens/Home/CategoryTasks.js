@@ -215,7 +215,13 @@ export default function CategoryTasks({ route }) {
               alignItems: "center",
             }}
           >
-            <Text style={{ textAlign: "center", fontSize: 18 }}>
+            <Text
+              style={{
+                textAlign: "center",
+                fontSize: 18,
+                color: COLORS.whiteText,
+              }}
+            >
               no tasks to do in {category}
             </Text>
           </View>

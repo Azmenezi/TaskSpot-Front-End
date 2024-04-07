@@ -9,6 +9,7 @@ import { View } from "react-native";
 import CreateTaskNav from "./CreateTaskNav.js";
 import HomeNav from "./HomeNav.js";
 import ProfileNav from "./ProfileNav.js";
+import { COLORS } from "../constants/themes.js";
 
 const Tab = createBottomTabNavigator();
 
@@ -16,14 +17,14 @@ function BottomNavigation() {
   return (
     <Tab.Navigator
       screenOptions={({ route }) => ({
-        // tabBarActiveTintColor: "#ffffff",
         tabBarInactiveTintColor: "gray",
-        tabBarActiveTintColor: "black",
+        tabBarActiveTintColor: COLORS.primary,
         tabBarShowLabel: false,
         tabBarStyle: {
+          backgroundColor: COLORS.behindItem,
           position: "absolute",
           height: 60,
-          borderTopColor: "#ffffff",
+          borderTopColor: COLORS.gray,
           borderTopWidth: 0.2,
           bottom: 25,
           left: 20,
@@ -60,7 +61,7 @@ function BottomNavigation() {
           tabBarIcon: ({ size, color, focused }) => (
             <View
               style={{
-                backgroundColor: "white",
+                backgroundColor: COLORS.behindItem,
                 borderRadius: 200,
                 height: 75,
                 width: 75,
@@ -81,7 +82,6 @@ function BottomNavigation() {
           tabBarIcon: ({ size, color, focused }) => (
             <View style={{ top: 10 }}>
               <FontAwesome5 name="clipboard-list" size={30} color={color} />
-              {/* <Ionicons name="person" /> */}
             </View>
           ),
         }}
