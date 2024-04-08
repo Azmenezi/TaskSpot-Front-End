@@ -147,7 +147,13 @@ export default function RecentTasks({ tasks, navigation, categories }) {
                 paddingTop: 16,
               }}
             >
-              <Text style={{ fontSize: 16, fontWeight: "500", color: "teal" }}>
+              <Text
+                style={{
+                  fontSize: 16,
+                  fontWeight: "500",
+                  color: COLORS.primary,
+                }}
+              >
                 See All
               </Text>
             </Pressable>

@@ -5,6 +5,7 @@ import { getCategories } from "../../apis/category";
 import { useQuery } from "@tanstack/react-query";
 import { Ionicons } from "@expo/vector-icons";
 import ROUTES from "../../navigations";
+import { COLORS } from "../../constants/themes";
 
 const MiddleScreen = ({ navigation }) => {
   const insets = useSafeAreaInsets();
@@ -15,18 +16,31 @@ const MiddleScreen = ({ navigation }) => {
   });
 
   return (
-    <ScrollView
-      contentContainerStyle={{
+    <View
+      style={{
         paddingTop: insets.top,
         paddingBottom: insets.bottom,
-        justifyContent: "space-between",
       }}
     >
       <View style={{ padding: 16, justifyContent: "center" }}>
-        <Text style={{ fontSize: 24, textAlign: "center" }}>
+        <Text
+          style={{
+            fontSize: 24,
+            fontWeight: "600",
+            textAlign: "center",
+            color: COLORS.whiteText,
+          }}
+        >
           Choose a category
         </Text>
-        <Text style={{ fontSize: 24, textAlign: "center" }}>
+        <Text
+          style={{
+            fontSize: 24,
+            fontWeight: "600",
+            textAlign: "center",
+            color: COLORS.whiteText,
+          }}
+        >
           to add a task to
         </Text>
       </View>
@@ -48,60 +62,33 @@ const MiddleScreen = ({ navigation }) => {
                 );
               }}
               style={{
+                width: "100%",
+                height: 120,
                 justifyContent: "center",
                 alignItems: "center",
-                backgroundColor: "gray",
-                borderRadius: 12,
-                padding: 20,
-                gap: 4,
+                backgroundColor: "lightgray",
+                borderRadius: 8,
+                marginRight: 8,
               }}
             >
-              <Ionicons name={category?.icon} size={40} color="black" />
-              <Text style={{ fontSize: 20 }}>{category?.name}</Text>
+              <View style={{ position: "absolute" }}>
+                <Ionicons
+                  name={category?.icon}
+                  size={40}
+                  color={COLORS.behindItem}
+                />
+              </View>
+              <View style={{ position: "absolute", bottom: 10, left: 10 }}>
+                <Text style={{ fontSize: 14, fontWeight: "600" }}>
+                  {category?.name}
+                </Text>
+              </View>
             </TouchableOpacity>
           </View>
         ))}
       </View>
-    </ScrollView>
+    </View>
   );
 };
 
 export default MiddleScreen;
-
-// import { View, Text, ScrollView } from "react-native";
-// import React, { useEffect, useState } from "react";
-// import { useSafeAreaInsets } from "react-native-safe-area-context";
-// import * as Location from "expo-location";
-// const MiddleScreen = () => {
-//   const [location, setLocation] = useState(null);
-//   const [errorMsg, setErrorMsg] = useState(null);
-
-//   useEffect(() => {
-//     (async () => {
-//       let { status } = await Location.requestForegroundPermissionsAsync();
-//       if (status !== "granted") {
-//         setErrorMsg("Permission to access location was denied");
-//         return;
-//       }
-
-//       let location = await Location.getCurrentPositionAsync({});
-//       setLocation(location);
-//     })();
-//   }, []);
-
-//   let text = "Waiting..";
-//   if (errorMsg) {
-//     text = errorMsg;
-//   } else if (location) {
-//     text = JSON.stringify(location);
-//   }
-//   //https://maps.google.com/?q=<lat>,<lng>
-//   console.log(location?.coords?.latitude, " ", location?.coords?.longitude);
-//   return (
-//     <View style={{ justifyContent: "center", alignSelf: "center" }}>
-//       <Text style={{}}>{text}</Text>
-//     </View>
-//   );
-// };
-
-// export default MiddleScreen;

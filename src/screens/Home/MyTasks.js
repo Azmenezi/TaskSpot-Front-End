@@ -149,7 +149,7 @@ export default function MyTasks({ route, navigation }) {
   };
 
   const renderItem = ({ item: category }) => (
-    <View style={{ paddingVertical: 10 }}>
+    <View style={{ paddingVertical: 10, gap: 5 }}>
       <Pressable
         onPress={() => toggleCategoryVisibility(category._id)}
         style={{
@@ -196,7 +196,6 @@ export default function MyTasks({ route, navigation }) {
             style={{
               alignItems: "flex-end",
               justifyContent: "center",
-              paddingVertical: 8,
             }}
           >
             <Pressable

@@ -123,7 +123,7 @@ export default function CategoryTasks({ route }) {
       style={{
         alignItems: "flex-end",
         justifyContent: "center",
-        paddingVertical: 8,
+        paddingVertical: 5,
       }}
     >
       <Pressable

@@ -45,7 +45,7 @@ export default function HorizintalCategories({ categories, navigation }) {
               height: 120,
               justifyContent: "center",
               alignItems: "center",
-              backgroundColor: "gray",
+              backgroundColor: "lightgray",
               borderRadius: 8,
               marginRight: 8,
             }}

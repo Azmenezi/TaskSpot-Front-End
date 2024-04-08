@@ -1,4 +1,4 @@
-import { Entypo, Fontisto } from "@expo/vector-icons";
+import { Fontisto, Octicons } from "@expo/vector-icons";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import React, { useState } from "react";
 import {
@@ -13,7 +13,7 @@ import {
 } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { addTasks } from "../../apis/tasks";
-
+import { COLORS } from "../../constants/themes";
 export default function AddTask({ route, navigation }) {
   const queryClient = useQueryClient();
   const { category } = route.params;
@@ -87,116 +87,178 @@ export default function AddTask({ route, navigation }) {
   return (
     <ScrollView
       contentContainerStyle={{
-        paddingTop: insets.top,
+        paddingTop: insets.top + 10,
         paddingBottom: insets.bottom + 100,
         flexGrow: 1,
+        paddingHorizontal: 16,
       }}
     >
-      <View style={{ padding: 16 }}>
-        <Text style={{ fontSize: 20, fontWeight: "600" }}>
-          adding tasks to {category?.name}
-        </Text>
-      </View>
-      {tasks.map((task, index) => (
-        <View
-          key={task.id}
-          style={{ paddingHorizontal: 20, paddingVertical: 6 }}
-        >
-          <View style={{ flexDirection: "row", gap: 5 }}>
-            <View style={{ width: "65%" }}>
-              <TextInput
-                style={{
-                  borderWidth: 0.2,
-                  borderRadius: 12,
-                  padding: 12,
-                }}
-                placeholder="Task text..."
-                onChangeText={(text) => handleChange(text, index)}
-                value={task.text}
-              />
-              {!task.id == 0 && (
-                <TouchableOpacity
-                  style={{ position: "absolute", right: 14, top: 8 }}
-                  onPress={() => removeTask(task.id)}
-                >
-                  <Fontisto name="trash" size={22} color="tomato" />
-                </TouchableOpacity>
-              )}
-            </View>
-            <View
-              style={{
-                width: "35%",
-                borderWidth: 0.2,
-                borderRadius: 12,
-                flexDirection: "row",
-                justifyContent: "space-evenly",
-                alignItems: "center",
-              }}
-            >
-              <TouchableOpacity
-                style={{
-                  width: "33%",
-                  justifyContent: "center",
-                  alignItems: "center",
-                }}
-                onPress={() => decrementAmount(index)}
-              >
-                <Text style={{ fontSize: 20 }}>-</Text>
-              </TouchableOpacity>
+      <View style={{ backgroundColor: COLORS.behindItem, borderRadius: 12 }}>
+        <View style={{ padding: 16 }}>
+          <Text
+            style={{ fontSize: 20, fontWeight: "600", color: COLORS.whiteText }}
+          >
+            adding tasks to {category?.name}
+          </Text>
+        </View>
+        {tasks.map((task, index) => (
+          <View
+            key={task.id}
+            style={{ paddingHorizontal: 20, paddingVertical: 6 }}
+          >
+            <View style={{ flexDirection: "row", gap: 5 }}>
+              <View style={{ width: "65%" }}>
+                <TextInput
+                  style={{
+                    borderWidth: 1.5,
+                    borderRadius: 12,
+                    borderColor: COLORS.primary,
+                    padding: 12,
+                    color: COLORS.whiteText,
+                  }}
+                  placeholder="Task text..."
+                  placeholderTextColor={COLORS.whiteText + "80"}
+                  onChangeText={(text) => handleChange(text, index)}
+                  value={task.text}
+                />
+                {!task.id == 0 && (
+                  <TouchableOpacity
+                    style={{ position: "absolute", right: 14, top: 8 }}
+                    onPress={() => removeTask(task.id)}
+                  >
+                    <Fontisto name="trash" size={22} color="tomato" />
+                  </TouchableOpacity>
+                )}
+              </View>
               <View
                 style={{
-                  width: "33%",
-                  justifyContent: "center",
+                  width: "35%",
+                  borderRadius: 12,
+                  flexDirection: "row",
+                  justifyContent: "space-evenly",
                   alignItems: "center",
+                  borderColor: COLORS.gray,
+                  borderWidth: 1.5,
                 }}
               >
-                <Text style={{ fontSize: 16 }}>{task.amount}</Text>
+                <TouchableOpacity
+                  style={{
+                    width: "33%",
+                    justifyContent: "center",
+                    alignItems: "center",
+                  }}
+                  onPress={() => decrementAmount(index)}
+                >
+                  <Text
+                    style={{
+                      fontSize: 24,
+                      color: COLORS.whiteText + "80",
+                      fontWeight: "500",
+                    }}
+                  >
+                    -
+                  </Text>
+                </TouchableOpacity>
+                <View
+                  style={{
+                    width: "33%",
+                    justifyContent: "center",
+                    alignItems: "center",
+                  }}
+                >
+                  <Text
+                    style={{
+                      fontSize: 16,
+                      color: COLORS.whiteText,
+                      fontWeight: "500",
+                    }}
+                  >
+                    {task.amount}
+                  </Text>
+                </View>
+                <TouchableOpacity
+                  style={{
+                    width: "33%",
+                    justifyContent: "center",
+                    alignItems: "center",
+                  }}
+                  onPress={() => incrementAmount(index)}
+                >
+                  <Text
+                    style={{
+                      fontSize: 24,
+                      color: COLORS.whiteText + "80",
+                      fontWeight: "500",
+                    }}
+                  >
+                    +
+                  </Text>
+                </TouchableOpacity>
               </View>
-              <TouchableOpacity
-                style={{
-                  width: "33%",
-                  justifyContent: "center",
-                  alignItems: "center",
-                }}
-                onPress={() => incrementAmount(index)}
-              >
-                <Text style={{ fontSize: 20 }}>+</Text>
-              </TouchableOpacity>
             </View>
           </View>
+        ))}
+        <View style={{ alignItems: "flex-end", padding: 16 }}>
+          <View style={{ flexDirection: "row", alignItems: "center", gap: 16 }}>
+            <Text
+              style={{
+                fontSize: 16,
+                fontWeight: "500",
+                color: COLORS.whiteText,
+              }}
+            >
+              Add another field
+            </Text>
+            <TouchableOpacity
+              style={{
+                width: 36,
+                height: 36,
+                backgroundColor: COLORS.gray,
+                borderRadius: 8,
+                justifyContent: "center",
+                alignItems: "center",
+              }}
+              onPress={addNewTask}
+            >
+              <Octicons name="plus" size={24} color={COLORS.primary} />
+            </TouchableOpacity>
+          </View>
         </View>
-      ))}
-      <TouchableOpacity
-        style={{
-          alignItems: "flex-end",
-          padding: 20,
-        }}
-        onPress={addNewTask}
-      >
-        <View style={{ flexDirection: "row", alignItems: "center", gap: 5 }}>
-          <Text style={{ fontSize: 16, fontWeight: "500" }}>Add a field</Text>
-          <Entypo name="squared-plus" size={30} color="green" />
+        <View style={{ paddingHorizontal: 50, paddingVertical: 20 }}>
+          <TouchableOpacity
+            disabled={isLoading ? true : false}
+            onPress={handleSubmit}
+            style={{
+              backgroundColor: COLORS.primary,
+              borderWidth: 2,
+              borderRadius: 12,
+              justifyContent: "center",
+              alignItems: "center",
+              padding: 16,
+            }}
+          >
+            {isLoading ? (
+              <ActivityIndicator
+                style={{
+                  fontSize: 20,
+                  color: COLORS.behindItem,
+                  fontWeight: "500",
+                }}
+                size={24}
+              />
+            ) : (
+              <Text
+                style={{
+                  fontSize: 20,
+                  color: COLORS.behindItem,
+                  fontWeight: "500",
+                }}
+              >
+                Create
+              </Text>
+            )}
+          </TouchableOpacity>
         </View>
-      </TouchableOpacity>
-      <View style={{ padding: 50 }}>
-        <TouchableOpacity
-          disabled={isLoading ? true : false}
-          onPress={handleSubmit}
-          style={{
-            backgroundColor: "gray",
-            borderWidth: 2,
-            borderRadius: 12,
-            justifyContent: "center",
-            alignItems: "center",
-            padding: 16,
-          }}
-        >
-          {isLoading ? (
-            <ActivityIndicator size={24} />
-          ) : (
-            <Text style={{ fontSize: 20 }}>Create</Text>
-          )}
-        </TouchableOpacity>
       </View>
     </ScrollView>
   );

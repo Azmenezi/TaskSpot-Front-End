@@ -11,6 +11,7 @@ import LocationPermissionModal from "../../components/Modals/LocationPermissionM
 import TimerNotification from "../../components/TimerNotification";
 import { calculateDistance } from "../../funcs/calculateDistance";
 import { mapStyle } from "../../style/mapStyle";
+import { COLORS } from "../../constants/themes";
 
 const LOCATION_TASK_NAME = "background-location-task";
 
@@ -205,7 +206,9 @@ const Home = () => {
                     name={place.category.icon}
                     size={22}
                     color={
-                      closestPlace?.name === place.name ? "#52374a" : "white"
+                      closestPlace?.name === place.name
+                        ? COLORS.primary
+                        : COLORS.whiteText + "90"
                     }
                   />
                 </Marker>
