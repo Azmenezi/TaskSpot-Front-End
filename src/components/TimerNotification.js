@@ -23,18 +23,19 @@ const TimerNotification = ({ place, tasks }) => {
 
     const listener = Notifications.addNotificationReceivedListener(() => {
       if (
-        (place === lastNotification.place &&
-          (place.category === lastNotification.category ||
-            now - lastNotification.time > 3600000)) ||
-        tasks.filter((task) => task.category === place.category._id).length ===
-          0
+        place === lastNotification.place ||
+        (place.category === lastNotification.category &&
+          now - lastNotification.time > 3600000) ||
+        tasks.filter((task) => task.category._id === place.category._id)
+          .length === 0
       )
         return;
 
       showMessage({
         message: "TaskSpot Notification",
         description: `You may find ${
-          tasks.filter((task) => task.category === place.category._id)[0]?.text
+          tasks.filter((task) => task.category._id === place.category._id)[0]
+            ?.text
         } at ${place.name}`,
         type: "info",
         icon: "info",
@@ -48,16 +49,14 @@ const TimerNotification = ({ place, tasks }) => {
   useEffect(() => {
     const now = new Date();
     console.log(
-      tasks.filter((task) => task.category == place.category._id).length
+      tasks.filter((task) => task.category._id == place.category._id).length
     );
-
-    // Check if the place is the same as the last place we notified about, or
-    // if the current place's category is the same as the last one and it has been less than an hour
     if (
-      (place === lastNotification.place &&
-        (place.category === lastNotification.category ||
-          now - lastNotification.time > 3600000)) ||
-      tasks.filter((task) => task.category === place.category._id).length === 0
+      place === lastNotification.place ||
+      (place.category === lastNotification.category &&
+        now - lastNotification.time > 3600000) ||
+      tasks.filter((task) => task.category._id === place.category._id)
+        .length === 0
     )
       return;
 
@@ -65,7 +64,8 @@ const TimerNotification = ({ place, tasks }) => {
       content: {
         title: "TaskSpot Notification",
         body: `You may find ${
-          tasks.filter((task) => task.category === place.category._id)[0]?.text
+          tasks.filter((task) => task.category._id === place.category._id)[0]
+            ?.text
         } at ${place.name}`,
         sound: true,
         priority: Notifications.AndroidNotificationPriority.HIGH,

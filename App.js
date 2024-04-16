@@ -48,7 +48,6 @@ export default function App() {
               hideStatusBar={true}
               hideOnPress={true}
             />
-            {/* <--- here as the last component */}
           </NavigationContainer>
         </SafeAreaProvider>
       </UserContext.Provider>

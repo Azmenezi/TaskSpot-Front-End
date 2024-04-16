@@ -53,7 +53,6 @@ export default function LocationPermissionModal({
           },
           async (location) => {
             if (isFetching) return;
-            console.log("firstLocation, location");
             checkProximityAndExecute(location);
             if (!usingForgroundLocation) {
               // Stop background updates if they are running
@@ -77,7 +76,7 @@ export default function LocationPermissionModal({
       setUsingForgroundLocation(false);
       foregroundSubscription && foregroundSubscription.remove();
     };
-  }, []);
+  }, [isFetching, usingForgroundLocation]);
 
   useEffect(() => {
     const handleAppStateChange = (nextAppState) => {

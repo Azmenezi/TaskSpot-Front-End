@@ -2,7 +2,7 @@
   "expo": {
     "name": "Taskspot",
     "slug": "TaskSpot",
-    "version": "1.0.3",
+    "version": "1.0.4",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "userInterfaceStyle": "light",
@@ -13,7 +13,10 @@
     },
     "assetBundlePatterns": ["**/*"],
     "ios": {
-      "buildNumber": "1.0.3",
+      "config": {
+        "googleMapsApiKey": "AIzaSyBihLBqD00L_5Nc4lbh9Z1n18Q5I1hgHfk"
+      },
+      "buildNumber": "1.0.4",
       "infoPlist": {
         "NSLocationWhenInUseUsageDescription": "This app requires access to your location when open.",
         "NSLocationAlwaysAndWhenInUseUsageDescription": "This app requires access to your location even when closed.",
@@ -23,6 +26,11 @@
       "bundleIdentifier": "com.azmenezi.TaskSpot"
     },
     "android": {
+      "config": {
+        "googleMaps": {
+          "apiKey": "AIzaSyBihLBqD00L_5Nc4lbh9Z1n18Q5I1hgHfk"
+        }
+      },
       "versionCode": 3,
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",

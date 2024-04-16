@@ -178,6 +178,7 @@ export default function CategoryTasks({ route }) {
             }
             style={[
               {
+                borderColor: COLORS.primary,
                 borderWidth: 3,
                 backgroundColor: COLORS.behindItem,
                 padding: 10,

@@ -246,6 +246,7 @@ export default function MyTasks({ route, navigation }) {
             }
             style={[
               {
+                borderColor: COLORS.primary,
                 borderWidth: 3,
                 backgroundColor: COLORS.behindItem,
                 padding: 10,

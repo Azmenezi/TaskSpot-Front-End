@@ -16,8 +16,8 @@ import { COLORS } from "../../constants/themes";
 const LOCATION_TASK_NAME = "background-location-task";
 
 const userCanChange = {
-  nearbyPlacesRadius: 1000,
-  PROXIMITY_THRESHOLD: 1000,
+  nearbyPlacesRadius: 10000,
+  PROXIMITY_THRESHOLD: 100,
   distanceInterval: 1,
 };
 
@@ -82,7 +82,7 @@ const Home = () => {
       accuracy: Location.Accuracy.High,
       timeInterval: 10000,
       distanceInterval: 1,
-      showsBackgroundLocationIndicator: true,
+      showsBackgroundLocationIndicator: false,
     });
   };
 
@@ -100,7 +100,6 @@ const Home = () => {
       fetchPlaces(userLocation); // Initial fetch or refetch when there are no places
       return;
     }
-
     // Calculate distances to all places and find the closest
     const distances = places.map((place) =>
       calculateDistance(
@@ -111,22 +110,11 @@ const Home = () => {
       )
     );
     const minDistance = Math.min(...distances);
-
     // Check if user is within proximity threshold of the closest place
     if (minDistance <= PROXIMITY_THRESHOLD) {
-      // Execute function when user is within proximity
-      console.log(
-        "User is within proximity of a place ",
-        minDistance.toFixed(0),
-        "meters away.",
-        places[distances.indexOf(minDistance)],
-        "place"
-      );
       if (closestPlace !== places[distances.indexOf(minDistance)]) {
         setClosestPlace(places[distances.indexOf(minDistance)]);
       }
-
-      // excutedFunction(places[distances.indexOf(minDistance)]);
     } else if (minDistance <= 100) {
       fetchPlaces(userLocation); // Fetch new places as user has more than 100 meters away from all places
     } else if (lastFetchLocation) {
@@ -137,20 +125,17 @@ const Home = () => {
         userLocation.coords.latitude,
         userLocation.coords.longitude
       );
-
       if (distanceFromLastFetch >= SIGNIFICANT_CHANGE) {
         fetchPlaces(userLocation); // Fetch new places as user has moved significantly
       }
     }
   };
-
   // function to fetching new places
   const fetchPlaces = (userLocation) => {
     setLastFetchLocation({
       latitude: userLocation.coords.latitude,
       longitude: userLocation.coords.longitude,
     });
-
     refetch();
   };
 

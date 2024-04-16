@@ -26,7 +26,9 @@ export default function RecentTasks({ tasks, navigation, categories }) {
           style={{ fontSize: 20, fontWeight: "600", color: COLORS.whiteText }}
         >
           Tasks to do{" "}
-          <Text style={{ color: "lightgray" }}>• {tasks?.length}</Text>
+          <Text style={{ color: "lightgray" }}>
+            • {tasks?.filter((task) => !task.done).length}
+          </Text>
         </Text>
         <View>
           <TouchableOpacity
@@ -47,7 +49,7 @@ export default function RecentTasks({ tasks, navigation, categories }) {
         </View>
       </View>
       <View>
-        {tasks.length === 0 ? (
+        {tasks?.length === 0 ? (
           <View style={{ paddingHorizontal: 16 }}></View>
         ) : (
           <>

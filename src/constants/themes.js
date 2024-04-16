@@ -15,16 +15,15 @@ const COLORS = {
   ///////////////////////////////
   text: "#333333",
   text2: "#cbc9d6",
-  text3: "#252c79", // changed to dark blue to provide contrast with the white background
+  text3: "#252c79",
   ///////////////////////////////
   icon: "#2d265b",
   card: "transparent",
   inputBackground: "#dadde1",
 
   popMenu: "#1c1c1c",
-  notification: "#4ccdff", // using the primary blue for notifications
-  GradientColors: ["#5f67ec", "#4ccdff"], // using the secondary blue and primary blue for gradients
-  // yes i am mariam
+  notification: "#4ccdff",
+  GradientColors: ["#5f67ec", "#4ccdff"],
   primaryOrange: "#ff9056",
   secondaryOrange: "#f67262",
   primaryBlue: "#4ccdff",
